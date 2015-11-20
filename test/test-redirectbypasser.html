@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Test RedirectBypasser</title>
+		<style type="text/css">
+			* {margin: 0px; padding: 0px; font: menu;}
+			html, body {background-color: #FFFFFF; color: #111111; height: 100%; font: menu;}
+			body {padding: 2px; margin-bottom: 300px;}
+			a {cursor: pointer; text-decoration: none; color: #1111CC;}
+			h2 {color: #EEEEEE; font-size: 4rem; height: 2rem; letter-spacing: -0.5rem; line-height: 1.5rem; overflow: hidden; text-overflow: clip; white-space: nowrap;}
+			object, embed, iframe {width: 100px; height: 100px; display: inline-block; border: 1px solid gray; float: left;}
+			
+			.list {display: flex; border-top: 1px solid #F6F6F6; border-bottom: 0px solid #F6F6F6;}
+			.list > div:first-child {
+				flex: 0 0 auto;
+				width: 20px;
+				min-height: 20px;
+				padding: 1px;
+				background-origin: content-box;
+				background-size: 140px 20px;
+				background-position: -120px center;
+				background-repeat: no-repeat;
+				background-color: CornflowerBlue;
+				background-image: url("data:image/svg+xml;charset=utf-8,%3C%3Fxml%20version%3D%221.0%22%20encoding%3D%22UTF-8%22%20standalone%3D%22no%22%3F%3E%0D%0A%3Csvg%20xmlns%3Ardf%3D%22http%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20xmlns%3Aosb%3D%22http%3A%2F%2Fwww.openswatchbook.org%2Furi%2F2009%2Fosb%22%20height%3D%2232%22%20width%3D%22224%22%20version%3D%221.1%22%20xmlns%3Acc%3D%22http%3A%2F%2Fcreativecommons.org%2Fns%23%22%20xmlns%3Adc%3D%22http%3A%2F%2Fpurl.org%2Fdc%2Felements%2F1.1%2F%22%3E%0D%0A%3Cg%20transform%3D%22translate%280%20-1020.4%29%22%3E%0D%0A%3Cg%20transform%3D%22matrix%28.55078%200%200%20.55078%2032.315%201011%29%22%3E%0D%0A%3Cpath%20d%3D%22m29.385%2022.376v33.589c-0.05297%200.93126-2.0645%200.43156-3.6312%200-4.318-1.659-14.525%200.61102-14.525%207.2624-0.0043%203.2872%204.1141%207.2861%209.078%207.2624%206.5361%200.04302%2011.214-3.9298%2014.525-7.2624v-29.05c5.5756%203.2191%209.0509%206.4666%205.4468%2012.709-0.07976%200.85769%203.0893%201.0908%203.6312%200%205.4564-5.9817%201.1992-13.326-1.8156-16.34-4.1857-4.1857-5.305-4.5809-7.2624-8.1702-0.7021-0.82078-5.2536-0.71436-5.4468%200z%22%20fill%3D%22%23fff%22%2F%3E%0D%0A%3C%2Fg%3E%0D%0A%3Cg%20transform%3D%22matrix%28.55434%200%200%20.55434%2065.128%201002.6%29%22%3E%0D%0A%3Cpath%20style%3D%22color%3A%23000000%22%20d%3D%22m2.4752%2036.55%200.0000102%2048.707h15.334l-0.00001-10.824h18.039l0.00001%2010.824h15.334l-0.00001-48.707h-15.334l-0.000013%205.4118h-18.039v-5.4118zm4.5099%200h7.2158l-0.000013%203.6079h-7.2158zm32.471%200h7.2158v3.6079h-7.2158zm-32.471%209.0197h7.2158v5.4118h-7.2158zm32.471%200h7.2158v5.4118h-7.2158zm-21.647%201.8039h18.039v21.647l-18.039%200.000001zm-10.824%209.0197h7.2158l0.000013%205.4118h-7.2158zm32.471%200.000001h7.2158v5.4118h-7.2158zm-32.471%2010.824h7.2158v5.4118h-7.2158zm32.471%200h7.2158v5.4118h-7.2158zm-32.471%2018.039h7.2158-0.000013zm32.471-7.2158h7.2158v5.4118h-7.2158zm-32.471%200.000001h7.2158v5.4118l-7.2158%200.000037zm32.471%207.2158h0.000005%207.2158l-0.000023%200.000037z%22%20fill%3D%22%23fff%22%2F%3E%0D%0A%3C%2Fg%3E%0D%0A%3Cg%20fill%3D%22%23fff%22%20transform%3D%22translate%28-83%29%22%3E%0D%0A%3Cpath%20style%3D%22color%3A%23000000%22%20d%3D%22m89%201025.9c-2.5462%200-3.5%200.9138-3.5%203.5l-0.000004%2014c0%202.4878%201.0056%203.5%203.5%203.5h20c2.5183%200%203.5-1.0224%203.5-3.5v-14c0-2.5612-1.0774-3.5-3.5-3.5zm-0.5%205c0-2.0035-0.0035-2%202-2h17c2.0035%200%202%200.041%202%202v11c-1.8896-3.2729-6.209-3.1022-8%200-0.22638%200.3921-0.77359%200.3922-1%200-3.7999-6.5816-8.1748-6.6254-12%200z%22%2F%3E%0D%0A%3Ccircle%20cx%3D%22104.5%22%20stroke%3D%22%23fff%22%20cy%3D%221033.9%22%20r%3D%221.44%22%20stroke-width%3D%222.12%22%2F%3E%0D%0A%3C%2Fg%3E%0D%0A%3Cg%20fill%3D%22%23fff%22%3E%0D%0A%3Cpath%20style%3D%22color%3A%23000000%22%20d%3D%22m196.5%201022.9v27h23v-27zm15.5%205h-4l-3.5%201-2%202v1l0.5%201%201-0.5%200.5%202%201.5-0.5v1.5l-1%202%201%201%202%201%200.5%202.5%201.5%201v1.5l1%200.5v-2.5l1-1.5v-1.5l1-1%200.5-1.5%201-2-3-1-1.5%200.5-2-0.5-1.5-1.5-1.5%201%200.5-1-1-1-1%200.5v-1h3.5l2-1%202-1s3.4094%200.4138%203.5%200.5c1.7985%201.7131%203%204.0784%203%207%200%205.4272-3.9079%209.5-9.5%209.5-5.4832%200-9.5-3.9844-9.5-9.5%200-5.4875%203.9819-9.5%209.5-9.5%202.1924%200%204%201%204%201z%22%2F%3E%0D%0A%3Cpath%20d%3D%22m112%201049.9-10.5-10h7v-17h7v17h7z%22%2F%3E%0D%0A%3Cpath%20style%3D%22color%3A%23000000%22%20d%3D%22m131.5%201022.9v4c0-0.7456%201.0115-2%202.5-2%201.3788%200%202.5%200.9648%202.5%202.5%200%201.4413-0.96497%202.5-2.5%202.5-1.5038%200-2.5-1.2462-2.5-2v7c0-0.7851%200.93372-2%202.5-2s2.5%200.9336%202.5%202.5c0%201.535-0.99622%202.5-2.5%202.5-1.535%200-2.5-1.3088-2.5-2v7c0-0.7225%200.99622-2%202.5-2%201.41%200%202.5%200.9649%202.5%202.5%200%201.4414-1.0587%202.5-2.5%202.5-1.4725%200-2.5-1.3091-2.5-2v6c0-0.098%201.0587-1%202.5-1%201.4056%200%202.5%200.7986%202.5%201h20v-27z%22%2F%3E%0D%0A%3C%2Fg%3E%0D%0A%3Cg%20transform%3D%22translate%28.21502%2017%29%22%3E%0D%0A%3Cpath%20style%3D%22color%3A%23000000%22%20d%3D%22m-20.462%2034.746c-0.6261-1.0268-2.9818-1.0268-3.6079%200l-22.549%2036.981c-2.1366%203.504%200.08786%207.2158%204.5099%207.2158h39.687c4.2437%200%206.6124-3.7676%204.5099-7.2158zm-1.8039%207.2158%2019.843%2031.569-39.687-0.000054z%22%20transform%3D%22matrix%28.55434%200%200%20.55434%20188.13%20988.1%29%22%20fill%3D%22%23fff%22%2F%3E%0D%0A%3C%2Fg%3E%0D%0A%3Ccircle%20cx%3D%22176%22%20cy%3D%221042.4%22%20r%3D%221.5%22%20fill%3D%22%23fff%22%2F%3E%0D%0A%3Cpath%20d%3D%22m174.5%201033.9v5h3v-5z%22%20fill-rule%3D%22evenodd%22%20fill%3D%22%23fff%22%2F%3E%0D%0A%3C%2Fg%3E%0D%0A%3C%2Fsvg%3E");
+			}
+			.icon0 {background-position: 0px center !important;}
+			.icon1 {background-position: -20px center !important;}
+			.icon2 {background-position: -40px center !important;}
+			.icon3 {background-position: -60px center !important;}
+			.icon4 {background-position: -80px center !important;}
+			.icon5 {background-position: -100px center !important;}
+			.icon6 {background-position: -120px center !important;}
+			.icon7 {background-position: -140px center !important;}
+			.list > div:last-child {display: inline-flex; flex-flow: row wrap; padding: 2px;}
+			.list > div:last-child a {margin: 2px;}
+			a.comma:not(:last-child):after {color: #111111; content: ", "; pointer-events: none; font-weight: bold;}
+			
+			.dynamic {
+				position:relative;
+				width: 100px;
+				height: 100px;
+				display: inline-block;
+				margin: 4px 2px;
+			}
+			.dynamic > a {
+				position: absolute;
+			}
+			.dynamic > a.hover-show {
+				z-index:1000;
+			}
+			.dynamic > a.hover-show,
+			.dynamic:hover > a.hover-hide {
+				display: none;
+			}
+			.dynamic:hover > a.hover-show {
+				display: unset;
+			}
+			.dynamic:hover > a.hover-move50 {
+				margin: 50%;
+			}
+			.dynamic:hover > a.hover-movev100 {
+				top: 100%;
+			}
+			.dynamic > a > div {
+				width: 100px;
+				height: 100px;
+				background-color: gray;
+				color: white;
+				text-align: center;
+				text-decoration: none;
+			}
+		</style>
+		<script type="text/javascript" src="../src/background-common.js"></script>
+		<script type="text/javascript">
+		var sendMessage = function(data, sendResponse) {
+			if (data.name == "opts.get") {
+				sendResponse({PAGE_DATA: rb.PAGE_DATA});
+				
+			} else if (data.name == "target.process") {
+				sendResponse(rb.linkProcess(data));
+			}
+		};
+
+		rb.optsBuild({getFromPlugins: true, watchAttrModified: true});
+		rb.sitesBuildRules(rb.SITES_RULES_DEFAULT);
+
+		document.addEventListener("DOMContentLoaded", function() {
+			var extTest = [
+				/\.(jpg|jpeg?|gif|png|bmp|ico|svg|svgz)$/i,
+				/\.(mp3|wav|wma|ra|mid|m3u|asx|ogg)$/i,
+				/\.(mov|mpg|avi|wmv|mpe|mpeg|rm|ram|rmvb|mp4|asf|flv|m4v|webm)$/i,
+				/\.(torrent|zip|rar|tar|tgz|gz|bz2|tbz2|gzip|z|sit|dmg|cab|7z|lzh|pkg)$/i,
+				/\.(txt|rtf|readme|xls|xlt|doc|dot|pps|odt|pdf)$/i,
+				/\.(exe|pif|lnk|scr|msi|vb|vbs|vba|wsh|ref|cmd|bat|reg|app|sh|bin|ini)$/i,
+				/\.(html)?/
+			];
+			var links = [
+				["security", "javascript:", "?url=javascript:alert(21)&amp;"],
+				["security", "data:", "?url=data:text/html"],
+				["ui", "big", "http://www.example.com?big_________p___________name123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789=http://example.com"],
+				["ui", "mix", "http://www.example.com?url=https://www.example.com&amp;mailto_url=mailto://johnny5@example.com&amp;mms_url=mms://example.com&amp;irc_url=irc://example.com&amp;news_url=news://example.com&amp;ed2k_url=ed2k://&amp;magnet_url=magnet://&amp;url=http://example.com/test.torrent&amp;url=http://example.com/test.jpg&amp;url=http://example.com/test.mp3&amp;url=http://example.com/test.mov&amp;url=http://example.com/test.swf&amp;url=http://example.com/test.zip&amp;url=http://example.com/test.txt&amp;url=http://example.com/test.pdf&amp;url=http://example.com/test.rss&amp;url=http://example.com/test.doc&amp;url=http://example.com/test.odt&amp;url=http://example.com/test.xls&amp;url=http://example.com/test.ppt&amp;url=http://example.com/test.js&amp;url=http://example.com/test.exe"],
+				["ui", "host", "http://www.example.com?url=http://example123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789123456789.com"],
+				["ui", "mix", "http://www.example.com?url=https://www.example.com&amp;mailto_url=mailto://johnny5@example.com&amp;mms_url=mms://example.com&amp;irc_url=irc://example.com&amp;news_url=news://example.com&amp;ed2k_url=ed2k://&amp;magnet_url=magnet://&amp;url=http://example.com/test.torrent&amp;url=http://example.com/test.jpg&amp;url=http://example.com/test.mp3&amp;url=http://example.com/test.mov&amp;url=http://example.com/test.swf&amp;url=http://example.com/test.zip&amp;url=http://example.com/test.txt&amp;url=http://example.com/test.pdf&amp;url=http://example.com/test.rss&amp;url=http://example.com/test.doc&amp;url=http://example.com/test.odt&amp;url=http://example.com/test.xls&amp;url=http://example.com/test.ppt&amp;url=http://example.com/test.js&amp;url=http://example.com/test.exe",
+					"style", "flex: none; position: absolute; right: 0px"],
+				["obfuscated", "percent-encoded", "http://www.example.com/?url=http%3A%2F%2Fexample.com"],
+				["obfuscated", "base64", "http://www.example.com/aHR0cDovL3d3dy5leGFtcGxlLmNvbS9iYXNlNjQ="],
+				["obfuscated", "reverse", "http://www.example.com/?url=esrever=u?/moc.elpmaxe.www//:ptth"],
+				["obfuscated", "hex", "http://www.example.com/?687474703A2F2F7777772E6578616D706C652E636F6D2F686578"],
+				["obfuscated", "javascript url", "javascript:window.open('http://www.example.com/'); void(0);"],
+				["obfuscated", "javascript url + base64", "javascript:window.open('http://www.example.com/aHR0cDovL3d3dy5leGFtcGxlLmNvbS9iYXNlNjQ='); void(0);"],
+				["obfuscated", "javascript url + reverse", "javascript:window.open('esrever=u?/moc.elpmaxe.www//:ptth'); void(0);"],
+				["obfuscated", "javascript url + reverse2", "javascript:window.open('url=#33=uu&45=ia#eurt=oi&esrever=lru?/moc.elpmaxe.www//:ptth&'); void(0);"],
+				["obfuscated", "javascript url + hex", "javascript:window.open('http://www.example.com/?687474703A2F2F7777772E6578616D706C652E636F6D2F686578'); void(0);"],
+				["attributes", "ignore", "javascript:void(0);", "codebase", "http://www.example.org/example2"],
+				["attributes", "onclick", "javascript:void(0);", "onclick", "alert('test=http://www.example.com/example1 www.example.org http://www.example.org/example2 &#34;http://www.example.org/example3&#34; '); return false;"],
+				["attributes", "http%3A%2F%2Fexample.com/escape1 http://www.êxaample.com http://www.example.com/ãnão http://www.example.com/ex...ample  http://www.example.com/escape%3A%2F%2F3 http%253A%252F%252Fexample.com/escape2 http://foo.com/more_(than)_one_(parens) \"http://www.example.com/example1\" http://www.example.com/example2   http://www.example.com/example3?q=v&amp;q2=v2#n=v3 www.example.com/noprotocol www.example.com ...", "javascript:void(0);"],
+				["others", "raw", "http://www.example.com/?http://www.example.com/raw?oi=true&t=2"],
+				["others", "raw2", "http://www.example.com/http://www.example.com/raw/raw2"],
+				["others", "Test recursion", "http://example.com/p0?p0=http%3A%2F%2Fexample.com%2F1%3Fp1%3Dhttp%253A%252F%252Fexample.com%252F2%253Fp2%253Dhttp%25253A%25252F%25252Fexample.com%25252F3%25253Fp3%25253Dhttp%2525253A%2525252F%2525252Fexample.com%2525252F4%2525253Fp4%2525253Dhttp%252525253A%252525252F%252525252Fexample.com%252525252F5%252525253Fp5%252525253Dhttp%25252525253A%25252525252F%25252525252Fexample.com%25252525252F6%25252525253Fp6%25252525253Dhttp%2525252525253A%2525252525252F%2525252525252Fexample.com%2525252525252F7%2525252525253Fp7%2525252525253Dhttp%252525252525253A%252525252525252F%252525252525252Fexample.com%252525252525252F8%252525252525253Fp8%252525252525253Dhttp%25252525252525253A%25252525252525252F%25252525252525252Fexample.com%25252525252525252F9%25252525252525253Fp9%25252525252525253Dhttp%2525252525252525253A%2525252525252525252F%2525252525252525252Fexample.com%2525252525252525252F10%2525252525252525253Fp10%2525252525252525253Dhttp%252525252525252525253A%252525252525252525252F%252525252525252525252Fexample.com%252525252525252525252F11%252525252525252525253Fp11%252525252525252525253Dhttp%25252525252525252525253A%25252525252525252525252F%25252525252525252525252Fexample.com%25252525252525252525252F12%25252525252525252525253Fp12%25252525252525252525253Dhttp%2525252525252525252525253A%2525252525252525252525252F%2525252525252525252525252Fexample.com%2525252525252525252525252F13%2525252525252525252525253Fp13%2525252525252525252525253Dhttp%252525252525252525252525253A%252525252525252525252525252F%252525252525252525252525252Fexample.com%252525252525252525252525252F14%252525252525252525252525253Fp14%252525252525252525252525253Dhttp%25252525252525252525252525253A%25252525252525252525252525252F%25252525252525252525252525252Fexample.com%25252525252525252525252525252F15"],
+				["others", "AttrModified 5000ms", "http://www.example.com/example?delay", "id", "delayed"],
+				["fixs", "base 64 + url fix", "http://www.example.com/?aHR0cDovL3d3dy5leGFtcGxlLmNvbS9wLzEwODAvZXhhbXBsZS5odG1sJmtleT0yMSZpZD0xMg=="],
+				["color", "Google Images", "http://example.com/?imgurl=http%3A%2F%2Fexample.com%2Fimgurl.jpg&amp;imgrefurl=http%3A%2F%2Fexample.com%2Fimgrefurl.html"],
+				["color", "Facebook", "http://example.com/?src=http%3A%2F%2Fexample.com%2Fsrc.jpg&amp;smallsrc=http%3A%2F%2Fexample.com%2Fsmallsrc.jpg", "ajaxify", "http://example.com/ajaxify?src=http%3A%2F%2Fexample.com%2Fsrc-ajaxify.jpg&amp;smallsrc=http%3A%2F%2Fexample.com%2Fsmallsrc-ajaxify.jpg"],
+				["color", "Yahoo images", "http://example.com/?back=http%3A%2F%2Fexample.com%2Fback&amp;imgurl=www.example.com%2Fimgurl-forced.jpg&rurl=http%3A%2F%2Fexample.com%2Frurl.html&fr2=example.com%2Ffr2-forced.html"],
+				["color", "Yahoo Video", "http://example.com?&turl=http%3A%2F%2Fexample.com%2Fturl.html&rurl=http%3A%2F%2Fexample.com%2Frurl.html"]
+			];
+			
+			if (/[\?&]color(&|$)/.test(location.search)) {
+				document.getElementById("test-color").style.display = "block";
+			}
+			
+			function ce() {
+				var a = arguments, e = document.createElement(a[0]), l = a.length;
+				
+				for (var i = 1, c = l + ~l % 2; i < c; i += 2) {
+					e.setAttribute(a[i], a[i + 1]);
+				}
+				
+				return (!(l % 2) && a[l - 1].appendChild(e)) || e;
+			}
+			var lGeneral = document.getElementById("list-general");
+			
+			extTest.forEach(function(rxp, idx){
+				var div1 = ce("div", "class", "list", lGeneral);
+				var div2 = ce("div", "class", "icon" + idx, "style", "background-color:" + "hsl(" + parseInt((idx / extTest.length * 100) * 3.6, 10) + ", 40%, 40%)", div1);
+				var div3 = ce("div", div1);
+				
+				(rxp.source.match(/\.\([^)]+\)/g) || []).forEach(function(src) {
+					(src.match(/[\w]+/g) || []).forEach(function(ext) {
+						ce("a", "class", "comma", "href", "http://www.example.com?url=http://www.example.com/test." + ext, div3).textContent = "." + ext;
+					});
+				});
+			});
+			
+			links.forEach(function(key){
+				var ar = key.splice(0, 2, "a", "href");
+				key.push("class", "comma", document.getElementById("list-" + ar[0]));
+				ce.apply(null, key).textContent = ar[1];
+			});
+			
+			document.getElementById("disable-rb").addEventListener("click", function() {
+				if (this.checked) {
+					redirectBypasser.stop();
+				} else {
+					redirectBypasser.start(OPTS);
+				}
+			}, false);
+			
+			setTimeout(function(){
+				var dly = document.getElementById("delayed");
+				dly.href = "/example?url=http://www.example.com/2";
+				dly.style.color = "green";
+				ce("a", "href", "http://www.example.com/?url=http://www.example.com/2", "style", "color: green;", document.getElementById("list-others")).textContent = "NodeInserted 5000ms";
+			}, 5000);
+			
+		}, false);
+		</script>
+		<script type="text/javascript" src="../src/content-scripts/content.js"></script>
+    </head>
+	<body>
+		<label><input type="checkbox" id="disable-rb"/> Disable Redirect Bypasser</label>
+		<h2>General</h2>
+		<div id="list-general"></div>
+		<h2>Security</h2>
+		<div class="list"><div></div><div id="list-security"></div></div>
+		<h2>UI</h2>
+		<div class="list"><div></div><div id="list-ui"></div></div>
+		<h2>Obfuscated</h2>
+		<div class="list"><div></div><div id="list-obfuscated"></div></div>
+		<h2>Attributes</h2>
+		<div class="list"><div></div><div id="list-attributes"></div></div>
+		<h2>Others</h2>
+		<div class="list"><div></div><div id="list-others"></div></div>
+		<h2>Fixs</h2>
+		<div class="list"><div></div><div id="list-fixs"></div></div>
+		<h2>Plugins</h2>
+		<div class="list">
+			<div></div><div id="list-plugins">
+				<object data="data:application/x-shockwave-flash;base64,Q1dT">
+					 Plugin
+					 <param name="src" value="http://example.com/test.mov" >
+					 <param name="src2" value="http://example.com/test2.mov" >
+					 <param name="src3" value="nothing" >
+					 <param name="src3" value="ftp://example.com" >
+					 <param name="flashvars" value="movie_f=http://example.com/test20.mov&amp;movie_f2=http://example.com/test21.mov" >
+				</object>
+				<object data="data:application/x-shockwave-flash;base64,Q1dT">
+					 Plugin
+					 <param name="src" value="http://example.com/test.mov" >
+					 <param name="src2" value="http://example.com/test2.mov" >
+					 <param name="src3" value="nothing" >
+					 <param name="src3" value="ftp://example.com" >
+					 <param name="flashvars" value="movie_f=http://example.com/test20.mov&amp;movie_f2=http://example.com/test21.mov" >
+					 <param name="wmode" value="transparent">
+				</object>
+				<embed type="application/x-shockwave-flash" src="data:application/x-shockwave-flash;base64,Q1dT" 
+				flashvars="movie_src=http://example.com/test.mov&amp;movie_src2=http://example.com/test2.mov&amp;zx=18%7Chttp://example.com/test25.mov%7C18%7Chttp://example.com/test26.mov"></embed>
+			</div>
+		</div>
+		<h2>Dynamic content</h2>
+		<div class="list">
+			<div></div>
+			<div>
+				<div class="dynamic">
+					<a class="hover-hide" href="http://example.com?initial1=http://example.com/initial1">
+						<div>initial</div>
+					</a>
+					<a class="hover-show hover-move50" href="http://example.com?hover1=http://example.com/hover1">
+						<div>hover</div>
+					</a>
+				</div>
+				<div class="dynamic">
+					<a class="" href="http://example.com?initial2=http://example.com/initial2">
+						<div>initial</div>
+					</a>
+					<a class="hover-show hover-move50" href="http://example.com?hover2=http://example.com/hover2">
+						<div>hover</div>
+					</a>
+				</div>
+				<div class="dynamic">
+					<a class="hover-movev100" href="http://example.com?initial3=http://example.com/initial3">
+						<div>initial</div>
+					</a>
+					<a class="hover-show" href="http://example.com?hover3=http://example.com/hover3">
+						<div>hover</div>
+					</a>
+				</div>
+				<div class="dynamic">
+					<a class="" href="http://example.com?initial4=http://example.com/initial4">
+						<div>initial</div>
+					</a>
+					<a class="hover-show" href="http://example.com?hover4">
+						<div>hover</div>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div id="test-color" style="display: none;">
+			<h2>Colors</h2>
+			<div class="list"><div></div><div id="list-color"></div></div>
+		</div>
+	</body>
+</html>

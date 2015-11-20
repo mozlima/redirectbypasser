@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+	<Description about="urn:mozilla:install-manifest">
+		<em:name>Redirect Bypasser</em:name>
+		<em:version>2.1</em:version>
+		<em:creator>Moises Lima</em:creator>
+		<em:description>Avoid redirects and has direct access to the sites you want to visit.</em:description>
+		<em:homepageURL>http://moisesplima.blogspot.com.br/redirect-bypasser</em:homepageURL>
+		<em:id>redirectbypasser@moonlight21.com</em:id>
+		<em:bootstrap>true</em:bootstrap>
+		<em:unpack>true</em:unpack>
+		<em:type>2</em:type>
+		<em:optionsType>3</em:optionsType>
+		<em:optionsURL>chrome://redirectbypasser/content/options.html</em:optionsURL>
+		
+		<em:localized>
+			<Description>
+				<em:locale>pt-BR</em:locale>
+				<em:creator>Moises Lima</em:creator>
+				<em:name>Redirect Bypasser</em:name>
+				<em:description>Evite redirecionamentos e tenha acesso direto aos sites que você quer visitar.</em:description>
+				<em:homepageURL>http://moisesplima.blogspot.com.br/redirect-bypasser</em:homepageURL>
+				<em:translator>Moises Lima</em:translator>
+			</Description>
+		</em:localized>
+		
+		<!-- Firefox -->
+		<em:targetApplication>
+			<Description>
+				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+				<em:minVersion>32.0</em:minVersion>
+				<em:maxVersion>45.*</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+		
+		<!-- SeaMonkey -->
+		<em:targetApplication>
+			<Description>
+				<em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
+				<em:minVersion>2.28</em:minVersion>
+				<em:maxVersion>2.41</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+		
+		<!-- Android -->
+		<em:targetApplication>
+			<Description>
+				<em:id>{aa3c5121-dab2-40e2-81ca-7ea25febc110}</em:id>
+				<em:minVersion>32.0</em:minVersion>
+				<em:maxVersion>45.*</em:maxVersion>
+			</Description>
+		</em:targetApplication>
+		
+		<em:iconURL>chrome://redirectbypasser/content/images/rb-icon48.png</em:iconURL>
+		<em:icon64URL>chrome://redirectbypasser/content/images/rb-icon64.png</em:icon64URL>
+	</Description>
+</RDF>

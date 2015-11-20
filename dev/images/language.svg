@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:osb="http://www.openswatchbook.org/uri/2009/osb"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg3820"
+   height="32"
+   width="32">
+  <defs
+     id="defs3822">
+    <linearGradient
+       osb:paint="solid"
+       id="linearGradient3835">
+      <stop
+         id="stop3837"
+         offset="0"
+         style="stop-color:#005600;stop-opacity:1;" />
+    </linearGradient>
+  </defs>
+  <metadata
+     id="metadata3825">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(0,-32)"
+     style="display:inline"
+     id="layer1">
+    <path
+       id="path4140"
+       d="m 17.577593,59.927093 -0.336017,-1.792094 -0.224012,-1.232063 1.456076,-0.672037 -0.560029,-0.448023 0.672036,-0.112008 0.78404,-0.784041 0.224013,-1.456076 1.456075,-0.336018 0.672036,-0.112007 0,-2.800146 1.456076,-0.672035 -1.34407,-1.680089 -1.456077,0 -0.560029,-0.672035 -0.896046,0.112008 -0.224013,-1.456076 -1.568082,0.112007 -1.120059,-1.008052 -1.232064,0.112007 -1.344071,-0.336016 -0.672036,0.672034 -1.120057,0.336017 -0.112009,-0.896047 0,-0.896047 -1.008052,0.336018 0.112008,-0.896047 -1.232065,0.560029 0.56003,-1.792092 2.12811,-1.008053 0.112008,1.120057 0.560028,-0.112008 0,-1.34407 1.9041,-1.008053 1.344072,-1.680088 2.240118,-0.672035 0.672035,0 -0.448024,-0.784041 -0.672036,-1.008053 -3.584187,1.232065 -2.576135,1.680087 -2.128112,2.128112 -1.344069,2.352123 0.448022,0.672035 0,1.344071 0.672036,0.448023 0.896048,-0.448023 0.672034,0.22401 0,0.896048 1.34407,-0.112008 0.112008,0.896047 -0.560029,0.896046 0,1.344072 0.784041,1.008052 0.672035,1.34407 1.008053,0.784041 0.336018,0.672035 0.336017,1.34407 -0.336017,1.904099 1.120058,1.344071 0,1.456077 z"
+       style="fill:#ffffff;fill-opacity:1;stroke:none;display:inline" />
+    <path
+       transform="translate(0,32)"
+       id="path4545"
+       d="M 16,3 C 24,3 29,9 29,16 29,24 23,29 16,29 8,29 3,23 3,16 3,8 9,3 16,3 z"
+       style="fill:none;stroke:#ffffff;stroke-width:2.6;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none" />
+  </g>
+</svg>

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Redirect Bypasser</title>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" type="image/png" href="images/rb-icon16.png" />
+	<script type="text/javascript" src="background-common.js"></script>
+	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript" src="options.js"></script>
+	<script type="text/javascript" src="content-scripts/content.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="container">
+			<h1 id="page-title">Redirect Bypasser</h1>
+			<div class="nav">
+				<a href="#general" data-lang-text="General"></a><!--
+				--><a href="#style" data-lang-text="Style"></a><!--
+				--><a href="#advanced" data-lang-text="Advanced"></a><!--
+				--><a href="#sites" data-lang-text="Sites"></a>
+			</div>
+			<a id="test-area" data-lang-text="testArea"></a>
+			<form>
+				<div id="general" class="tab">
+					<div class="field">
+						<label for="highlightLink" data-lang-text="highlightLink"></label><!--
+						--><input type="checkbox" id="highlightLink" name="highlightLink" />
+					</div>
+					
+					<div class="field">
+						<label for="openInNewPage" data-lang-text="openInNewPage"></label><!--
+						--><select id="openInNewPage" name="openInNewPage">
+							<option value="0" data-lang-text="openInNewPage0">...</option>
+							<option value="1" data-lang-text="openInNewPage1">...</option>
+							<option value="2" data-lang-text="openInNewPage2">...</option>
+						</select>
+					</div>
+					<h2 data-lang-text="Behavior">...</h2>
+					<div class="field">
+						<select class="select-menu-behavior" name="replaceTargetUrl" data-evt-change="menu.behavior.change">
+							<option value="0" data-lang-text="replaceTargetUrl0">...</option>
+							<option value="1" data-lang-text="replaceTargetUrl1">...</option>
+							<option value="2" data-lang-text="replaceTargetUrl2">...</option>
+							<option value="3" data-lang-text="replaceTargetUrl3">...</option>
+							<option value="4" data-lang-text="replaceTargetUrl4">...</option>
+						</select>
+						<b>&gt;</b>
+						<select class="select-menu-behavior" name="useFallbackRule">
+							<option value="0" data-lang-text="useFallbackRule0">...</option>
+							<option value="1" data-lang-text="useFallbackRule1">...</option>
+						</select>
+						<b>&gt;</b>
+						<a href="#sites" data-lang-text="Manage_rules"></a>
+					</div>
+					<h2 data-lang-text="Keyboard_shortcuts">...</h2>
+					<div class="notice warning" data-lang-text="keyboard_tip"></div>
+					<div class="field">
+						<label for="keysShowPopup" data-lang-text="keysShowPopup"></label><!--
+						--><input type="text" id="keysShowPopup" name="keysShowPopup" data-keyboard-keys/> *
+					</div>
+					<div class="field">
+						<label for="keysOpenAsDownload" data-lang-text="keysOpenAsDownload"></label><!--
+						--><input type="text" id="keysOpenAsDownload" name="keysOpenAsDownload" data-keyboard-keys/> **
+					</div>
+					<div class="field">
+						<label for="keysPreventReferrer" data-lang-text="keysPreventReferrer"></label><!--
+						--><input type="text" id="keysPreventReferrer" name="keysPreventReferrer" data-keyboard-keys/> **
+					</div>
+					<div class="field">
+						<label for="keysAddSiterule" data-lang-text="keysAddSiterule"></label><!--
+						--><input type="text" id="keysAddSiterule" name="keysAddSiterule" data-keyboard-keys/> **
+					</div>
+					<div class="field">
+						<label for="keysToggleEnable" data-lang-text="keysToggleEnable"></label><!--
+						--><input type="text" id="keysToggleEnable" name="keysToggleEnable" data-keyboard-keys/>
+					</div>
+					<div class="field">
+						<label for="keysToggleEnableTemp" data-lang-text="keysToggleEnableTemp"></label><!--
+						--><input type="text" id="keysToggleEnableTemp" name="keysToggleEnableTemp" data-keyboard-keys/>
+					</div>
+				</div>
+				<div id="style" class="tab">
+					<h2 data-lang-text="Menu">...</h2>
+					<div class="field">
+						<label data-lang-text="menuShowDelay" for="menuShowDelay"></label><!--
+						--><input type="number" min="0" max="2000" step="100" id="menuShowDelay" name="menuShowDelay"/>
+					</div>
+					<div class="field">
+						<label data-lang-text="menuHideDelay" for="menuHideDelay"></label><!--
+						--><input type="number" min="0" max="2000" step="100" id="menuHideDelay" name="menuHideDelay"/>
+					</div>
+					
+					<div class="field">
+						<label data-lang-text="menuOpacity" for="menuOpacity"></label>&nbsp;<!--
+						--><input type="range" min="0.05" max="1" step="0.05" id="menuOpacity" name="menuOpacity" />
+					</div>
+					<div class="field">
+						<label data-lang-text="menuOpacityHover" for="menuOpacityHover"></label>&nbsp;<!--
+						--><input type="range" min="0.05" max="1" step="0.05" id="menuOpacityHover" name="menuOpacityHover" />
+					</div>
+					<div class="field">
+						<label for="menuShadowDepth" data-lang-text="menuShadowDepth"></label><!--
+						--><input type="number" min="0" max="50" step="1" name="menuShadowDepth" id="menuShadowDepth" />
+					</div>
+					<h2 data-lang-text="Icons">...</h2>
+					<div class="field">
+						<label for="iconSize" data-lang-text="iconSize"></label><!--
+						--><input type="number" min="10" max="32" step="2" id="iconSize" name="iconSize" />
+					</div>
+					<h2 data-lang-text="Tooltip">...</h2>
+					<div class="field">
+						<label for="tooltipFontSize" data-lang-text="tooltipFontSize"></label><!--
+						--><input type="number" min="10" max="32" step="1" id="tooltipFontSize" name="tooltipFontSize" />
+					</div>
+					<div class="field">
+						<label for="tooltipColor" data-lang-text="tooltipColor"></label><!--
+						--><input type="color" id="tooltipColor" name="tooltipColor" />
+					</div>
+					<div class="field">
+						<label for="tooltipBackgroundColor" data-lang-text="tooltipBackgroundColor"></label><!--
+						--><input type="color" id="tooltipBackgroundColor" name="tooltipBackgroundColor" />
+					</div>
+					<div class="field">
+						<label for="tooltipShowIcon" data-lang-text="tooltipShowIcon"></label><!--
+						--><input type="checkbox" id="tooltipShowIcon" name="tooltipShowIcon" />
+					</div>
+				</div>
+				<div id="advanced" class="tab">
+					<h2 data-lang-text="Protocols">...</h2>
+					<div class="field">
+						<template id="tpl-protocol-item"><input type="text" value="http" class="protocol-item" data-removable="true"/></template><!--
+						--><button type="button" class="icon green" data-evt-click="item.clone|protocol-item">+</button>
+					</div>
+					<h2 data-lang-text="Methods">...</h2>
+					<div class="field">
+						<label for="useDeobfuscator" data-lang-text="useDeobfuscator"></label><!--
+						--><input type="checkbox" id="useDeobfuscator" name="useDeobfuscator" />
+					</div>
+					<div class="field">
+						<label for="getFromTagText" data-lang-text="getFromTagText"></label><!--
+						--><input type="checkbox" id="getFromTagText" name="getFromTagText" />
+					</div>
+					<div class="field">
+						<label for="getFromPlugins" data-lang-text="getFromPlugins"></label><!--
+						--><input type="checkbox" id="getFromPlugins" name="getFromPlugins" />
+					</div>
+					<div class="field">
+						<label for="getFromAttributes" data-lang-text="getFromAttributes"></label><!--
+						--><input type="checkbox" id="getFromAttributes" name="getFromAttributes" />
+					</div>
+					<h2 data-lang-text="Excluded_attr">...</h2>
+					<div class="field">
+						<template id="tpl-excludedattr-item"><input type="text" value="" class="excludedattr-item" data-removable="true"/></template><!--
+						--><button type="button" class="icon green" data-evt-click="item.clone|excludedattr-item">+</button>
+					</div>
+					<div class="field">
+						<label for="maxCaptureRecursion" data-lang-text="maxCaptureRecursion"></label><!--
+						--><input type="number" min="0" max="1000" step="1" id="maxCaptureRecursion" name="maxCaptureRecursion" />
+					</div>
+					<div class="field">
+						<label for="watchNodeInserted" data-lang-text="watchNodeInserted"></label><!--
+						--><input type="checkbox" id="watchNodeInserted" name="watchNodeInserted" />
+					</div>
+					<div class="field">
+						<label for="watchAttrModified" data-lang-text="watchAttrModified"></label><!--
+						--><input type="checkbox" id="watchAttrModified" name="watchAttrModified" />
+					</div>
+					<h2 data-lang-text="Extension_sort_order">...</h2>
+					<div class="field">
+						<template id="tpl-extorder-item"><input type="text" value="" class="extorder-item" data-removable="true" data-movable="extorder-item"/></template><!--
+						--><button type="button" class="icon green" data-evt-click="item.clone|extorder-item">+</button>
+					</div>
+				</div>
+				<div id="sites" class="tab">
+					<h2 data-lang-text="Rules">...</h2>
+					<div class="notice warning" data-lang-text="siterules_tip"></div>
+					<div class="field">
+						<div data-lang-text="Patterns_parameters"></div>
+						<div id="siterules"></div>
+						<div><button type="button" class="text green" data-evt-click="siterule.add" data-lang-text="Add_rule">Add</button></div>
+					</div>
+					<h2 data-lang-text="Ignore">...</h2>
+					<div class="field">
+						<div data-lang-text="Patterns"></div>
+						<div class="field">
+							<template id="tpl-siterule-ignore-pattern"><input type="text" value="*://example.org*" class="siterule-ignore-pattern" data-removable="true"></template><!--
+						--><button type="button" class="icon green" data-evt-click="item.clone|siterule-ignore-pattern">+</button>
+						</div>
+					</div>
+					<div class="field">
+						<button type="button" class="text green" data-evt-click="siterule.add.default" data-lang-text="Add_default_rules"></button>
+					</div>
+				</div>
+				<div class="action-buttons">
+					<select id="select-language" name="language" data-lang-title="Language" data-evt-change="language.switch">
+						<option value="auto" data-lang-text="Auto">...</option>
+					</select><!--
+					--><button type="button" class="green" data-lang-text="Save" data-evt-click="form.action|save"></button><!--
+					--><button type="button" class="red"  data-lang-text="Reset" data-evt-click="form.action|reset"></button>
+				</div>
+			</form>
+		</div>
+		<div class="push"></div>
+	</div>
+	<div class="footer">
+		<p>v<span id="about-version"></span>
+		<a href="http://moisesplima.blogspot.com.br/redirect-bypasser" target="_blank">Moises Lima</a>
+		|
+		<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=5SZ5YCKYWJTNY" target="_blank" data-lang-text="Donate_paypal">Donate</a></p>
+	</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{
+	"name": "Redirect Bypasser",
+	"version": "2.1",
+	"manifest_version": 2,
+	"homepage_url": "http://moisesplima.blogspot.com.br/redirect-bypasser",
+	"default_locale": "en",
+	"description": "__MSG_extShortDesc__",
+	"developer": {
+		"name": "Moises Lima",
+		"url": "http://moisesplima.blogspot.com.br"
+	},
+	"icons": {
+		"16": "images/rb-icon16.png",
+		"48": "images/rb-icon48.png",
+		"64": "images/rb-icon64.png",
+		"128": "images/rb-icon128.png"
+	},
+	"background": {
+		"scripts": ["background-common.js", "background.js"],
+		"persistent": true
+	},
+	"options_page": "options.html",
+	"content_scripts": [{
+		"matches": ["http://*/*", "https://*/*", "ftp://*/*", "file://*/*"],
+		"js": ["content-scripts/content.js"],
+		"run_at": "document_start",
+		"all_frames": true
+	}],
+	"permissions": [
+		"tabs",
+		"storage",
+		"http://*/*",
+		"https://*/*",
+		"file://*/*",
+		"notifications"
+	],
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+}

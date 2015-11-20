@@ -1,0 +1,126 @@
+"use strict";
+
+//chrome.storage.local.clear();
+
+(function() {
+var siteruleFormData = {};
+
+function runtimeOnMessage(msgData, msgSender, sendResponse) {
+	switch (msgData.name) {
+		case "opts.get":
+			sendResponse({PAGE_DATA: ((OPTS.scriptEnabled || msgData.force)? rb.PAGE_DATA : rb.PAGE_DATA_SIMPLE )});
+			break;
+		case "target.process":
+			sendResponse(rb.linkProcess(msgData));
+			break;
+		case "tab.open":
+			msgData.openerTabId = msgSender.tab.id;
+			delete msgData.name;
+			chrome.tabs.create(msgData);
+			break;
+		case "state.toggle":
+			rb.PAGE_DATA.OPTS.scriptEnabled = OPTS.scriptEnabled = !OPTS.scriptEnabled;
+			chrome.storage.local.set({"opts": OPTS});
+			updateContentScript();
+			showNotification(OPTS.scriptEnabled);
+			break;
+		case "opts.set":
+			if (msgData.opts) {
+				rb.optsBuild(msgData.opts);
+				chrome.storage.local.set({"opts": OPTS});
+			}
+			
+			chrome.storage.local.get("sitesrules", function(storageData) {
+				var sitesrules = ((msgData.sitesrulesAction == "replace")? msgData.sitesrules : (storageData.sitesrules || JSON.parse(JSON.stringify(rb.SITES_RULES_DEFAULT))));
+				
+				if (msgData.sitesrulesAction == "merge") {
+					msgData.sitesrules.rules.forEach(function(k) {
+						sitesrules.rules.push(k);
+					});
+					msgData.sitesrules.ignore.forEach(function(k) {
+						sitesrules.ignore.push(k);
+					});
+				}
+				
+				if ((msgData.sitesrulesAction == "replace") || (msgData.sitesrulesAction == "merge")) {
+					rb.sitesFilterRules(sitesrules);
+					chrome.storage.local.set({"sitesrules": sitesrules});
+				}
+				
+				rb.sitesBuildRules((OPTS.replaceTargetUrl)? sitesrules : null);
+				updateContentScript();
+				sendResponse();
+			});
+			return true;
+		case "siterules.addform.getdata":
+			sendResponse(siteruleFormData);
+			break;
+		case "siterules.addform.show":
+			siteruleFormData = msgData;
+			
+			chrome.extension.getViews({type: "tab"}).forEach(function(win) {
+				win.close();
+			});
+			
+			chrome.tabs.create({url: chrome.extension.getURL("siterules.html"), openerTabId: msgSender.tab.id, index: msgSender.tab.index + 1});
+			break;
+		case "notification.show":
+			showNotification(msgData.scriptEnabled);
+			break;
+		default :
+			sendResponse({});
+			break;
+	}
+}
+
+function updateContentScript() {
+	var code = "if (typeof redirectBypasser != \"undefined\") {redirectBypasser.stop(); redirectBypasser.start({PAGE_DATA: " + JSON.stringify(rb.PAGE_DATA) + "});}";
+	
+	chrome.tabs.query({url: ["https://*/*", "http://*/*", "file://*/*"]}, function(tabs) {
+		for (var i = 0; i < tabs.length; i++) {
+			chrome.tabs.executeScript(tabs[i].id, {code: code, allFrames: true, runAt: "document_start"}, function() {
+				if (!chrome.runtime.lastError) {}
+			});
+		}
+	});
+}
+
+function showNotification(scriptEnabled) {
+	chrome.notifications.create("notf1", {
+		type: "basic",
+		title: "Redirect Bypasser",
+		message: chrome.i18n.getMessage((scriptEnabled)? "ON" : "OFF"),
+		iconUrl: ((scriptEnabled)? "images/rb-icon48-enable.png" : "images/rb-icon48-disable.png")
+	});
+}
+
+chrome.runtime.onMessage.addListener(runtimeOnMessage);
+chrome.storage.local.get(["opts", "sitesrules"], function(storageData) {
+	if (rb.optsBuild(storageData.opts)) {
+		chrome.storage.local.set({"opts": OPTS});
+		//chrome.tabs.create({"url": chrome.runtime.getManifest().homepage_url});
+	}
+	
+	rb.sitesBuildRules(storageData.sitesrules || rb.SITES_RULES_DEFAULT);
+	chrome.extension.isAllowedIncognitoAccess(function(isAllowedIncognitoAccess) {
+		chrome.extension.isAllowedFileSchemeAccess(function(isAllowedFileSchemeAccess) {
+			var code = "if (typeof redirectBypasser != \"undefined\") {redirectBypasser.stop(true); redirectBypasser = null;}";
+			var urls = ["https://*/*", "http://*/*"];
+			isAllowedFileSchemeAccess && urls.push("file://*/*");
+			//FIXME
+			chrome.tabs.query({url: urls}, function(tabs) {
+				tabs.forEach(function(tab) {
+					if (!tab.incognito || isAllowedIncognitoAccess) {
+						chrome.tabs.executeScript(tab.id, {code: code, allFrames: true, runAt: "document_idle"}, function() {
+							if (!chrome.runtime.lastError) {
+								chrome.tabs.executeScript(tab.id, {file: "/content-scripts/content.js", allFrames: true, runAt: "document_idle"});
+							}
+						});
+					}
+				});
+			});
+		});
+	});
+});
+
+})();

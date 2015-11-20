@@ -1,0 +1,216 @@
+{
+	"extShortDesc": {
+		"description": "this will be in the chrome web store: must be 132 characters or less",
+		"message": "Avoid redirects and has direct access to the sites you want to visit."
+	},
+	"General": {
+		"message": "General"
+	},
+	"Style": {
+		"message": "Style"
+	},
+	"Advanced": {
+		"message": "Advanced"
+	},
+	"Sites": {
+		"message": "Sites"
+	},
+	"highlightLink": {
+		"message": "Highlight active link on the page"
+	},
+	"openInNewPage": {
+		"message": "Open in new page"
+	},
+	"openInNewPage0": {
+		"message": "Default Browser behavior"
+	},
+	"openInNewPage1": {
+		"message": "Open in new tab"
+	},
+	"openInNewPage2": {
+		"message": "Open in background tab"
+	},
+	"replaceTargetUrl0": {
+		"message": "0: Use only menu"
+	},
+	"replaceTargetUrl1": {
+		"message": "1: Always show menu and replace URL of the link"
+	},
+	"replaceTargetUrl2": {
+		"message": "2: Always show menu and replace URL if link has only one redirect"
+	},
+	"replaceTargetUrl3": {
+		"message": "3: Show menu if link has more than one redirect and always replace URL of the link"
+	},
+	"replaceTargetUrl4": {
+		"message": "4: Show menu if link has more than one redirect and replace URL if link has only one redirect"
+	},
+	"useFallbackRule0": {
+		"message": "Replace URL only by rules"
+	},
+	"useFallbackRule1": {
+		"message": "Replace URL by rules and use an alternate fallback method if no rules is set"
+	},
+	"Manage_rules": {
+		"message": "Manage rules"
+	},
+	"Keyboard_shortcuts": {
+		"message": "Keyboard shortcuts"
+	},
+	"keyboard_tip": {
+		"message": "The option \"Keyboard shortcut to show the menu\" controls the menu visibility.\nUsage:\n*  Press while the cursor is over any link in the page.\n** Press while click any icon on menu popup."
+	},
+	"keysShowPopup": {
+		"message": "Keyboard shortcut to show the menu"
+	},
+	"keysOpenAsDownload": {
+		"message": "Open link as download"
+	},
+	"keysPreventReferrer": {
+		"message": "Stop link from sending referrer. Useful to avoid 403/Forbidden pages"
+	},
+	"keysAddSiterule": {
+		"message": "Add rule to the link"
+	},
+	"keysToggleEnable": {
+		"message": "Enable/disable the extension"
+	},
+	"keysToggleEnableTemp": {
+		"message": "Enable/disable the extension (current page only)"
+	},
+	"Menu": {
+		"message": "Menu"
+	},
+	"menuShowDelay": {
+		"message": "Show delay (ms)"
+	},
+	"menuHideDelay": {
+		"message": "Hide delay (ms)"
+	},
+	"menuOpacity": {
+		"message": "Opacity"
+	},
+	"menuOpacityHover": {
+		"message": "Opacity (hover)"
+	},
+	"menuShadowDepth": {
+		"message": "Shadow depth"
+	},
+	"Icons": {
+		"message": "Icons"
+	},
+	"iconSize": {
+		"message": "Size (px)"
+	},
+	"Tooltip": {
+		"message": "Tooltip"
+	},
+	"tooltipFontSize": {
+		"message": "Font size (px)"
+	},
+	"tooltipColor": {
+		"message": "Color"
+	},
+	"tooltipBackgroundColor": {
+		"message": "Background color"
+	},
+	"tooltipShowIcon": {
+		"message": "Show favicon"
+	},
+	"Protocols": {
+		"message": "Protocols"
+	},
+	"Methods": {
+		"message": "Methods"
+	},
+	"useDeobfuscator": {
+		"message": "Obfuscated (Hex, Base64...)"
+	},
+	"getFromTagText": {
+		"message": "Text content"
+	},
+	"getFromPlugins": {
+		"message": "Plugins"
+	},
+	"getFromAttributes": {
+		"message": "Attributes (onclick, onmouseover...)"
+	},
+	"Excluded_attr": {
+		"message": "Ignored attributes"
+	},
+	"maxCaptureRecursion": {
+		"message": "Maximum capture recursion depth on a single link"
+	},
+	"watchNodeInserted": {
+		"message": "Check content inserted, after page load"
+	},
+	"watchAttrModified": {
+		"message": "Detect attribute changes"
+	},
+	"Extension_sort_order": {
+		"message": "Extension sort order"
+	},
+	"Rules": {
+		"message": "Rules"
+	},
+	"siterules_tip": {
+		"message": "Rules also are added by using the shortcut set in General > Keys > Add rule to the link.\n\nPatterns: URL of the link (use * as wildcard). Use <tld> to matches any TLD (com, org, net, gov...).\n\nParameters:\n1. Any query string parameter.\n   Example: imgrefurl matches ...&imgrefurl=http://example.com.\n2. @attribute-name: matches an attribute.\n   Example: @onclick, @onmouseover...\n3. *.extension: matches a extension.\n   Example: *.jpg, *.mp4...\n4. #extraction-method: matches a extraction method (#base64, #hex, #reverse, #text, #javascript, #forced).\n5. Parameters except extensions can be mixed in the same field with commas.\n   Example: \"@attribute,src\" matches if contains @attribute followed by src.\n   Does not work: \"@attribute,*.avi\", \"*.mp3,*.avi\"...\n\nThe processing order of the rules is according as they are shown on configuration page."
+	},
+	"Patterns_parameters": {
+		"message": "Patterns / parameters"
+	},
+	"Add_rule": {
+		"message": "Add rule"
+	},
+	"Add_default_rules": {
+		"message": "Add default rules"
+	},
+	"Ignore": {
+		"message": "Ignore"
+	},
+	"Patterns": {
+		"message": "Patterns"
+	},
+	"Add_rule": {
+		"message": "Add rule"
+	},
+	"Pattern": {
+		"message": "Pattern"
+	},
+	"Behavior": {
+		"message": "Behavior"
+	},
+	"siteruleBehaviorOriginal": {
+		"message": "Use original URL"
+	},
+	"siteruleBehaviorIgnore": {
+		"message": "Ignore this URL"
+	},
+	"Language": {
+		"message": "Language"
+	},
+	"Auto": {
+		"message": "Auto-select"
+	},
+	"Save": {
+		"message": "Save"
+	},
+	"Close": {
+		"message": "Close"
+	},
+	"Reset": {
+		"message": "Reset"
+	},
+	"testArea": {
+		"message": "Test area"
+	},
+	"ON": {
+		"message": "ON"
+	},
+	"OFF": {
+		"message": "OFF"
+	},
+	"Donate_paypal": {
+		"message": "Donate with Paypal"
+	}
+}

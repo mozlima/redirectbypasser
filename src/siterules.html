@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Redirect Bypasser</title>
+	<meta charset="utf-8">
+	<link rel="shortcut icon" type="image/png" href="images/rb-icon16.png" />
+	<script type="text/javascript" src="background-common.js"></script>
+	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript" src="siterules.js"></script>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="container">
+			<h1 id="page-title">Redirect Bypasser</h1>
+			<form>
+				<div id="sites">
+					<h2 data-lang-text="Add_rule">...</h2>
+					<div class="field">
+						<div data-lang-text="Pattern"></div>
+						<select id="select-siterule-pattern" style="width:100%;" data-evt-change="pattern.switch"></select>
+					</div>
+					<div class="field">
+						<div data-lang-text="Behavior"></div>
+						<input type="radio" name="siteruleBehavior" id="siteruleBehaviorParam" value="siteruleBehaviorParam" checked/>
+						<template id="tpl-siterule-rule-param">
+							<input type="text" value="" class="siterule-rule-param" data-removable="true" data-movable="siterule-rule-param"/>
+						</template>
+						<button type="button" class="icon green" data-evt-click="item.clone|siterule-rule-param">+</button>
+					</div>
+					<div class="field">
+						<input type="radio" name="siteruleBehavior" id="siteruleBehaviorOriginal" value="siteruleBehaviorOriginal"/>
+						<label style="vertical-align: middle;" for="siteruleBehaviorOriginal" data-lang-text="siteruleBehaviorOriginal"></label>
+					</div>
+					<div class="field">
+						<input type="radio" name="siteruleBehavior" id="siteruleBehaviorIgnore" value="siteruleBehaviorIgnore"/>
+						<label style="vertical-align: middle;" for="siteruleBehaviorIgnore" data-lang-text="siteruleBehaviorIgnore"></label>
+					</div>
+				</div>
+				<div class="action-buttons">
+					<select id="select-language" name="language" data-lang-title="Language" data-evt-change="language.switch">
+						<option value="auto" data-lang-text="Auto">Auto</option>
+					</select><!--
+					--><button type="button" class="green" data-lang-text="Save" data-evt-click="form.action|save"></button><!--
+					--><button type="button" class="red"  data-lang-text="Close" data-evt-click="form.action|close"></button>
+				</div>
+			</form>
+		</div>
+		<div class="push"></div>
+	</div>
+	<div class="footer">
+		<p>v<span id="about-version"></span>
+		<a href="http://moisesplima.blogspot.com.br/redirect-bypasser" target="_blank">Moises Lima</a>
+		|
+		<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=5SZ5YCKYWJTNY" target="_blank" data-lang-text="Donate_paypal">Donate</a></p>
+	</div>
+</body>
+</html>
+
+

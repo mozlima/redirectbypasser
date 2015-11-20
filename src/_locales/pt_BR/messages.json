@@ -1,0 +1,216 @@
+{
+	"extShortDesc": {
+		"description": "this will be in the chrome web store: must be 132 characters or less",
+		"message": "Evite redirecionamentos e tenha acesso direto aos sites que você quer visitar."
+	},
+	"General": {
+		"message": "Geral"
+	},
+	"Style": {
+		"message": "Estilo"
+	},
+	"Advanced": {
+		"message": "Avan\u00E7ado"
+	},
+	"Sites": {
+		"message": "Sites"
+	},
+	"highlightLink": {
+		"message": "Destacar link ativo na p\u00E1gina"
+	},
+	"openInNewPage": {
+		"message": "Abrir links em nova p\u00E1gina"
+	},
+	"openInNewPage0": {
+		"message": "Padr\u00E3o do navegador"
+	},
+	"openInNewPage1": {
+		"message": "Abrir em nova aba"
+	},
+	"openInNewPage2": {
+		"message": "Abrir em segundo plano"
+	},
+	"replaceTargetUrl0": {
+		"message": "0: Usar somente menu"
+	},
+	"replaceTargetUrl1": {
+		"message": "1: Sempre usar menu e substituir URL do link"
+	},
+	"replaceTargetUrl2": {
+		"message": "2: Sempre usar menu e substituir URL do link se o link tem apenas uma op\u00E7\u00E3o de redirecionamento"
+	},
+	"replaceTargetUrl3": {
+		"message": "3: Usar menu se precisar e sempre substituir URL do link"
+	},
+	"replaceTargetUrl4": {
+		"message": "4: Usar menu se precisar e substituir URL do link se o link tem apenas uma op\u00E7\u00E3o de redirecionamento"
+	},
+	"useFallbackRule0": {
+		"message": "Somente por regras"
+	},
+	"useFallbackRule1": {
+		"message": "Regras e usar um plano alternativo quando n\u00E3o houver regras para um link"
+	},
+	"Manage_rules": {
+		"message": "Configurar regras"
+	},
+	"Keys": {
+		"message": "Atalhos de teclado"
+	},
+	"keyboard_tip": {
+		"message": "A op\u00E7\u00E3o \"Tecla de atalho para mostrar o menu\" controla a visibilidade do menu.\nUtiliza\u00E7\u00E3o:\n*  Pressione enquanto o cursor esta sobre o link na p\u00E1gina.\n** Pressione enquanto clica em algum \u00EDcone no menu popup."
+	},
+	"keysShowPopup": {
+		"message": "Tecla de atalho para mostrar o menu"
+	},
+	"keysOpenAsDownload": {
+		"message": "Abrir link como download"
+	},
+	"keysPreventReferrer": {
+		"message": "Bloqueiar o envio de \"referrer\". \u00DAtil para evitar p\u00E1ginas 403/Forbidden"
+	},
+	"keysAddSiterule": {
+		"message": "Adicionar regra para o link"
+	},
+	"keysToggleEnable": {
+		"message": "Ativar/desativar a extens\u00E3o"
+	},
+	"keysToggleEnableTemp": {
+		"message": "Ativar/desativar a extens\u00E3o (somente na p\u00E1gina atual)"
+	},
+	"Menu": {
+		"message": "Menu"
+	},
+	"menuShowDelay": {
+		"message": "Atraso antes de mostrar (ms)"
+	},
+	"menuHideDelay": {
+		"message": "Atraso antes de esconder (ms)"
+	},
+	"menuOpacity": {
+		"message": "Opacidade"
+	},
+	"menuOpacityHover": {
+		"message": "Opacidade (Mouse sobre)"
+	},
+	"menuShadowDepth": {
+		"message": "Sombra"
+	},
+	"Icons": {
+		"message": "\u00CDcones"
+	},
+	"iconSize": {
+		"message": "Tamanho (pixel)"
+	},
+	"Tooltip": {
+		"message": "Dica de contexto"
+	},
+	"tooltipFontSize": {
+		"message": "Tamanho da fonte (pixel)"
+	},
+	"tooltipColor": {
+		"message": "Cor do texto"
+	},
+	"tooltipBackgroundColor": {
+		"message": "Cor do plano de fundo"
+	},
+	"tooltipShowIcon": {
+		"message": "Mostrar favicon"
+	},
+	"Protocols": {
+		"message": "Lista de protocolos"
+	},
+	"Methods": {
+		"message": "M\u00E9todos"
+	},
+	"useDeobfuscator": {
+		"message": "Protetores de links"
+	},
+	"getFromTagText": {
+		"message": "Texto do link"
+	},
+	"getFromPlugins": {
+		"message": "Plugins"
+	},
+	"getFromAttributes": {
+		"message": "Atributos do link (onclick, onmouseover...)"
+	},
+	"Excluded_attr": {
+		"message": "Atributos ignorados"
+	},
+	"maxCaptureRecursion": {
+		"message": "N\u00FAmero m\u00E1ximo de recurs\u00F5es permitido para a captura em um \u00FAnico link"
+	},
+	"watchNodeInserted": {
+		"message": "Verificar conte\u00FAdo inserido ap\u00F3s carregamento da p\u00E1gina"
+	},
+	"watchAttrModified": {
+		"message": "Verificar atributos modificados ap\u00F3s carregamento da p\u00E1gina"
+	},
+	"Extension_sort_order": {
+		"message": "Ordem de classifica\u00E7\u00E3o de extens\u00F5es"
+	},
+	"Rules": {
+		"message": "Regras"
+	},
+	"siterules_tip": {
+		"message": "Regras tamb\u00E9m podem ser adicionadas usando o atalho configurado em Geral > Atalhos de teclado > Adicionar regra para o link.\n\nModelos de URL: URL do link (use * como caractere-curinga). Use <tld> para combinar com qualquer TLD (com, org, net, gov...).\n\nPar\u00E2metros:\n1. Algum par\u00E2metro da \"query string\" da URL.\n   Ex: imgrefurl corresponde a ...&imgrefurl=http://example.com.\n2. @nome-do-atributo: corresponde a um atributo.\n   Ex: @onclick, @onmouseover...\n3. *.extens\u00E3o: corresponde a uma extens\u00E3o.\n   Ex: *.jpg, *.mp4...\n4. #m\u00E9todo-de-extra\u00E7\u00E3o: corresponde a um m\u00E9todo de extra\u00E7\u00E3o (#base64, #hex, #reverse, #text, #javascript, #forced).\n5. Par\u00E2metros, exceto extens\u00F5es podem ser misturados no mesmo campo usando v\u00EDrgulas\n   Ex: \"@attribute,src\" combina se contem @attribute seguido por src.\n   N\u00E3o funciona: \"@attribute,*.avi\", \"*.mp3,*.avi\"...\n\nA ordem de processamento das regras \u00E9 de acordo como s\u00E3o exibidas na p\u00E1gina de configura\u00E7\u00E3o."
+	},
+	"Patterns_parameters": {
+		"message": "Modelos de URL / Par\u00E2metros"
+	},
+	"Add_rule": {
+		"message": "Adicionar Regra"
+	},
+	"Add_default_rules": {
+		"message": "Adicionar Regras padr\u00E3o"
+	},
+	"Ignore": {
+		"message": "Ignorar"
+	},
+	"Patterns": {
+		"message": "Modelos de URL"
+	},
+	"Add_rule": {
+		"message": "Adicionar Regra"
+	},
+	"Pattern": {
+		"message": "Modelo de URL"
+	},
+	"Behavior": {
+		"message": "Comportamento"
+	},
+	"siteruleBehaviorOriginal": {
+		"message": "Usar a URL original do link"
+	},
+	"siteruleBehaviorIgnore": {
+		"message": "Ignorar esta URL"
+	},
+	"Language": {
+		"message": "Idioma"
+	},
+	"Auto": {
+		"message": "Autom\u00E1tico"
+	},
+	"Save": {
+		"message": "Salvar"
+	},
+	"Close": {
+		"message": "Fechar"
+	},
+	"Reset": {
+		"message": "Padr\u00E3o"
+	},
+	"testArea": {
+		"message": "\u00C1rea de teste"
+	},
+	"ON": {
+		"message": "Ligado"
+	},
+	"OFF": {
+		"message": "Desligado"
+	},
+	"Donate_paypal": {
+		"message": "Doar com Paypal"
+	}
+}
