@@ -186,6 +186,18 @@
 	"siteruleBehaviorIgnore": {
 		"message": "Ignorar esta URL"
 	},
+	"About": {
+		"message": "Sobre"
+	},
+	"Changelog": {
+		"message": "Changelog"
+	},
+	"Source_code": {
+		"message": "C\u00F3digo fonte"
+	},
+	"Contributors": {
+		"message": "Colaboradores"
+	},
 	"Language": {
 		"message": "Idioma"
 	},
