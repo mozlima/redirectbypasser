@@ -4,11 +4,16 @@ var sendMessage = ((window.chrome && chrome.runtime)? chrome.runtime.sendMessage
 
 (function() {
 t.availableLanguages = ["en", "pt_BR"];
-t.load("en");
 ce("link", "type", "text/css", "rel", "stylesheet", "href", "options.css?" + Date.now(), "media", "all", document.head);
 
 function init(optsStored, sitesrulesStored) {
-	if ((document.readyState != "interactive") && (document.readyState != "complete")) {
+	if (!Object.keys(t.languages).length) {
+		if (!init.langLoaded) {
+			init.langLoaded = true;
+			t.load(optsStored.language || OPTS.language);
+		}
+		return setTimeout(init, 100, optsStored, sitesrulesStored);
+	} else if ((document.readyState != "interactive") && (document.readyState != "complete")) {
 		return document.addEventListener("DOMContentLoaded", function() {
 			init(optsStored, sitesrulesStored);
 		}, false);
@@ -50,51 +55,45 @@ function init(optsStored, sitesrulesStored) {
 	}
 	
 	var eventActions = {
-		"click": {
-			"siterule.add": function(ev, name, val, focused, chkd) {
-				siteruleAdd([["*://example.org*"] , ["*.html"]]);
-			},
-			"siterule.add.default": function(ev) {
-				rb.SITES_RULES_DEFAULT.rules.forEach(siteruleAdd);
-				rb.SITES_RULES_DEFAULT.ignore.forEach(function(key) {
-					addItem("siterule-ignore-pattern").value = key;
+		"click.siterule.add": function(ev, name, val, focused, chkd) {
+			siteruleAdd([["*://example.org*"] , ["*.html"]]);
+		},
+		"click.siterule.add.default": function(ev) {
+			rb.SITES_RULES_DEFAULT.rules.forEach(siteruleAdd);
+			rb.SITES_RULES_DEFAULT.ignore.forEach(function(key) {
+				addItem("siterule-ignore-pattern").value = key;
+			});
+		},
+		"click.item.clone": function(ev, name, val, focused, chkd) {
+			addItem(name);
+		},
+		"click.form.action": function(ev, type) {
+			if (type == "reset") {
+				sendMessage({name: "opts.set", opts : OPTS_DEFAULT}, function() {
+					window.location.reload();
 				});
-			},
-			"item.clone": function(ev, name, val, focused, chkd) {
-				addItem(name);
-			},
-			"form.action": function(ev, type) {
-				if (type == "reset") {
-					sendMessage({name: "opts.set", opts : OPTS_DEFAULT}, function() {
-						window.location.reload();
-					});
-				} else {
-					var data = getFormData();
-					
-					sendMessage({name: "opts.set", opts: data.opts, sitesrules: data.sitesrules, sitesrulesAction: "replace"}, function() {
-						window.location.reload();
-					});
-				}
+			} else {
+				var data = getFormData();
+				
+				sendMessage({name: "opts.set", opts: data.opts, sitesrules: data.sitesrules, sitesrulesAction: "replace"}, function() {
+					window.location.reload();
+				});
 			}
 		},
-		"change": {
-			"menu.behavior.change": function(ev) {
-				document.querySelector("select[name=\"useFallbackRule\"]").disabled = !+ev.target.value;
-			},
-			"language.switch": function(ev) {
-				t.load(ev.target.value, function() {
-					t.node(document);
-				});
-			}
+		"change.language.switch": function(ev) {
+			t.load(ev.target.value, function() {
+				t.node(document);
+			});
 		}
 	}
 	
 	t.availableLanguages.sort().forEach(function(key) {
-		this.options.add(new Option(key.replace("_", " "), key));
+		this.options.add(new Option(key.replace("_", "-").toUpperCase(), key));
 	}, document.getElementById("select-language"));
 	
 	rb.optsBuild(optsStored);
 	rb.sitesBuildRules(sitesrulesStored);
+	ce("script", "src", "content-scripts/content.js", document.head);
 	
 	Object.keys(OPTS).forEach(function(key) {
 		q("input[name='" + key + "'], select[name='" + key + "']").forEach(function(el) {
@@ -140,29 +139,24 @@ function init(optsStored, sitesrulesStored) {
 		addItem("siterule-ignore-pattern").value = key;
 	});
 	
-	document.querySelector("select[name=\"useFallbackRule\"]").disabled = !+document.querySelector("select[name=\"replaceTargetUrl\"]").value;
 	document.getElementById("about-version").textContent = OPTS_DEFAULT.version;
 	
-	t.load(OPTS.language, function() {
-		t.node(document);
-	});
+	t.node(document);
 	tabSelect(location.hash || "#general");
-	document.body.addEventListener("input", handleEvents, true);
-	document.body.addEventListener("click", handleEvents, true);
-	document.body.addEventListener("change", handleEvents, true);
+	for (var a = Object.keys(eventActions), i = a.length; i--; document.body.addEventListener(a[i].substring(0, a[i].indexOf(".")), handleEvents, true));
 	document.addEventListener("change", updateScript, false);
 	document.addEventListener("inputafterremove", updateScript, false);
 	
 	function handleEvents(ev) {
 		var action = ev.target.getAttribute("data-evt-" + ev.type);
-		
-		if (action && eventActions[ev.type]) {
+		if (action) {
 			var params = action.split("|");
-			var fnc = params[0];
-			params[0] = ev;
-			
-			if (eventActions[ev.type][fnc] && eventActions[ev.type][fnc].apply(eventActions, params)) {
-				ev.preventDefault();
+			var fnc = eventActions[ev.type + "." + params[0]];
+			if (fnc) {
+				params[0] = ev;
+				if (fnc.apply(fnc, params)) {
+					ev.preventDefault();
+				}
 			}
 		}
 	}
@@ -290,15 +284,8 @@ function init(optsStored, sitesrulesStored) {
 
 if (window.chrome && chrome.storage) {
 	chrome.storage.local.get(["opts", "sitesrules"], function(storageData) {
-		setTimeout(init, 10, storageData.opts, storageData.sitesrules);
+		setTimeout(init, 10, storageData.opts || {}, storageData.sitesrules || {});
 	});
-	
-	chrome.runtime.onMessage.addListener(function(msgData) {
-		if (msgData.name == "showNotification") {
-			redirectBypasser.showNotification(msgData.scriptEnabled);
-		}
-	});
-	
 } else {
 	var optsStored, sitesrulesStored;
 	var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.redirectbypasser.");
@@ -319,7 +306,7 @@ if (window.chrome && chrome.storage) {
 		((win.location.href.indexOf("chrome://redirectbypasser/content/") === 0) && (win !== window)) && win.close();
 	});
 	
-	init(optsStored, sitesrulesStored);
+	init(optsStored || {}, sitesrulesStored || {});
 }
 
 })();

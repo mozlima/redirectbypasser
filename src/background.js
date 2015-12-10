@@ -1,8 +1,5 @@
-"use strict";
-
-//chrome.storage.local.clear();
-
 (function() {
+"use strict";
 var siteruleFormData = {};
 
 function runtimeOnMessage(msgData, msgSender, sendResponse) {
@@ -57,11 +54,9 @@ function runtimeOnMessage(msgData, msgSender, sendResponse) {
 			break;
 		case "siterules.addform.show":
 			siteruleFormData = msgData;
-			
 			chrome.extension.getViews({type: "tab"}).forEach(function(win) {
 				win.close();
 			});
-			
 			chrome.tabs.create({url: chrome.extension.getURL("siterules.html"), openerTabId: msgSender.tab.id, index: msgSender.tab.index + 1});
 			break;
 		case "notification.show":
@@ -75,13 +70,12 @@ function runtimeOnMessage(msgData, msgSender, sendResponse) {
 
 function updateContentScript() {
 	var code = "if (typeof redirectBypasser != \"undefined\") {redirectBypasser.stop(); redirectBypasser.start({PAGE_DATA: " + JSON.stringify(rb.PAGE_DATA) + "});}";
-	
 	chrome.tabs.query({url: ["https://*/*", "http://*/*", "file://*/*"]}, function(tabs) {
-		for (var i = 0; i < tabs.length; i++) {
-			chrome.tabs.executeScript(tabs[i].id, {code: code, allFrames: true, runAt: "document_start"}, function() {
+		tabs.forEach(function(tab) {
+			chrome.tabs.executeScript(tab.id, {code: code, allFrames: true, runAt: "document_start"}, function() {
 				if (!chrome.runtime.lastError) {}
 			});
-		}
+		});
 	});
 }
 
@@ -96,28 +90,14 @@ function showNotification(scriptEnabled) {
 
 chrome.runtime.onMessage.addListener(runtimeOnMessage);
 chrome.storage.local.get(["opts", "sitesrules"], function(storageData) {
-	if (rb.optsBuild(storageData.opts)) {
-		chrome.storage.local.set({"opts": OPTS});
-		//chrome.tabs.create({"url": chrome.runtime.getManifest().homepage_url});
-	}
-	
+	var code = "if (typeof redirectBypasser != \"undefined\") {redirectBypasser.stop(true); redirectBypasser = undefined;}";
+	rb.optsBuild(storageData.opts) && chrome.storage.local.set({"opts": OPTS});
 	rb.sitesBuildRules(storageData.sitesrules || rb.SITES_RULES_DEFAULT);
-	chrome.extension.isAllowedIncognitoAccess(function(isAllowedIncognitoAccess) {
-		chrome.extension.isAllowedFileSchemeAccess(function(isAllowedFileSchemeAccess) {
-			var code = "if (typeof redirectBypasser != \"undefined\") {redirectBypasser.stop(true); redirectBypasser = null;}";
-			var urls = ["https://*/*", "http://*/*"];
-			isAllowedFileSchemeAccess && urls.push("file://*/*");
-			//FIXME
-			chrome.tabs.query({url: urls}, function(tabs) {
-				tabs.forEach(function(tab) {
-					if (!tab.incognito || isAllowedIncognitoAccess) {
-						chrome.tabs.executeScript(tab.id, {code: code, allFrames: true, runAt: "document_idle"}, function() {
-							if (!chrome.runtime.lastError) {
-								chrome.tabs.executeScript(tab.id, {file: "/content-scripts/content.js", allFrames: true, runAt: "document_idle"});
-							}
-						});
-					}
-				});
+	chrome.tabs.query({url: ["https://*/*", "http://*/*", "file://*/*"]}, function(tabs) {
+		tabs.forEach(function(tab) {
+			chrome.tabs.executeScript(tab.id, {code: code, allFrames: true, runAt: "document_idle"}, function() {
+				if (!chrome.runtime.lastError) {}
+				chrome.tabs.executeScript(tab.id, {file: "/content-scripts/content.js", allFrames: true, runAt: "document_idle"}, function() {if (!chrome.runtime.lastError) {}});
 			});
 		});
 	});

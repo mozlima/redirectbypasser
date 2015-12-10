@@ -4,7 +4,7 @@ Useful to avoid frame pages (e.g., Google images, Yahoo, Bing...) , ads, surveys
 
 * Extract links recursively (every URL found are added to a pop-up overlay while hovering the link to let the user choose the best option in a fast way).
 
-* Decode obfuscated links as "reverse", base64 and hex. (tricks used by some sites to prevent direct access to the original web address).
+* Decode obfuscated links as "reverse", base64 and hex (tricks used by some sites to prevent direct access to the original web address).
 
 * Extract web addresses within tag's attributes (e.g. onclick, onmouseover...), text contents and JavaScript: protocol  (mostly used to open pop-ups or to show overlays).
 

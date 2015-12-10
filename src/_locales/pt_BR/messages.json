@@ -30,26 +30,20 @@
 	"openInNewPage2": {
 		"message": "Abrir em segundo plano"
 	},
-	"replaceTargetUrl0": {
-		"message": "0: Usar somente menu"
+	"menuEnable": {
+		"message": "Ativar menu"
 	},
-	"replaceTargetUrl1": {
-		"message": "1: Sempre usar menu e substituir URL do link"
+	"menuHideIfSingleRedir": {
+		"message": "Esconder o menu se o link tem apenas uma op\u00E7\u00E3o de redirecionamento"
 	},
-	"replaceTargetUrl2": {
-		"message": "2: Sempre usar menu e substituir URL do link se o link tem apenas uma op\u00E7\u00E3o de redirecionamento"
+	"replaceUrl": {
+		"message": "Substituir URL do link"
 	},
-	"replaceTargetUrl3": {
-		"message": "3: Usar menu se precisar e sempre substituir URL do link"
+	"replaceOnlySingleRedir": {
+		"message": "Somente se o link tem apenas uma op\u00E7\u00E3o de redirecionamento"
 	},
-	"replaceTargetUrl4": {
-		"message": "4: Usar menu se precisar e substituir URL do link se o link tem apenas uma op\u00E7\u00E3o de redirecionamento"
-	},
-	"useFallbackRule0": {
-		"message": "Somente por regras"
-	},
-	"useFallbackRule1": {
-		"message": "Regras e usar um plano alternativo quando n\u00E3o houver regras para um link"
+	"useFallbackRule": {
+		"message": "Usar um plano alternativo quando n\u00E3o houver regras para um link"
 	},
 	"Manage_rules": {
 		"message": "Configurar regras"

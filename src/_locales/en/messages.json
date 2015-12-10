@@ -30,26 +30,20 @@
 	"openInNewPage2": {
 		"message": "Open in background tab"
 	},
-	"replaceTargetUrl0": {
-		"message": "0: Use only menu"
+	"menuEnable": {
+		"message": "Enable menu"
 	},
-	"replaceTargetUrl1": {
-		"message": "1: Always show menu and replace URL of the link"
+	"menuHideIfSingleRedir": {
+		"message": "Hide the menu if the URL has a single redirect"
 	},
-	"replaceTargetUrl2": {
-		"message": "2: Always show menu and replace URL if link has only one redirect"
+	"replaceUrl": {
+		"message": "Replace URL of the link"
 	},
-	"replaceTargetUrl3": {
-		"message": "3: Show menu if link has more than one redirect and always replace URL of the link"
+	"replaceOnlySingleRedir": {
+		"message": "Only if the URL has a single redirect"
 	},
-	"replaceTargetUrl4": {
-		"message": "4: Show menu if link has more than one redirect and replace URL if link has only one redirect"
-	},
-	"useFallbackRule0": {
-		"message": "Replace URL only by rules"
-	},
-	"useFallbackRule1": {
-		"message": "Replace URL by rules and use an alternate fallback method if no rules is set"
+	"useFallbackRule": {
+		"message": "Use an alternate fallback method if no rules is set for the link"
 	},
 	"Manage_rules": {
 		"message": "Manage rules"

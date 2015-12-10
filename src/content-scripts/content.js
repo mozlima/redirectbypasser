@@ -1,8 +1,7 @@
-"use strict";
-
 if (typeof redirectBypasser == "undefined") {
 var sendMessage = ((window.chrome && chrome.runtime)? chrome.runtime.sendMessage : sendMessage);
 var redirectBypasser = new function() {
+	"use strict";
 	var doc 					= window.document;
 	var redirectBypasser 	 	= this;
 	var OPTS 					= {};
@@ -121,6 +120,7 @@ var redirectBypasser = new function() {
 				uiPopup.style.visibility = "hidden";
 				uiPopup.style.display = "block";
 				uiPopup.parentNode || doc.documentElement.insertBefore(uiPopup, doc.documentElement.firstChild);
+				uiStyle.parentNode || doc.head.appendChild(uiStyle);
 				
 				var isPlugin = /embed|object|video|audio/i.test(target.nodeName), uPW = uiPopup.offsetWidth, uPH = uiPopup.offsetHeight;
 				
@@ -172,11 +172,12 @@ var redirectBypasser = new function() {
 	
 	function uiRemoveItems(targetID, target) {
 		for (var a = uiMenulist.querySelectorAll("a[data-rb-target-id=\"" + targetID + "\"]"), i = a.length; i--; a[i].remove());
-		
 		target.removeAttribute("rb-hl");
-		
 		if (!uiMenulist.childNodes.length) {
-			uiTarget = null; uiTooltip.style.visibility = "hidden"; uiPopup.remove();
+			uiTarget = null;
+			uiTooltip.style.visibility = "hidden";
+			uiPopup.remove();
+			(!OPTS.highlightLink || !OPTS.replaceUrl) && uiStyle.remove();
 		}
 	}
 	
@@ -199,7 +200,7 @@ var redirectBypasser = new function() {
 				
 				if (show && (target.nodeName == "A") || (target.nodeName == "AREA")) {
 					if (!OPTS.keysShowPopup || (OPTS.keysShowPopup != handleKeyRaw)) {
-						if ((OPTS.replaceTargetUrl == 3 || OPTS.replaceTargetUrl == 4) && data.replaceURL && (data.index.length == 1)) {
+						if (OPTS.menuHideIfSingleRedir && data.replaceURL && (data.index.length == 1)) {
 							show = false;
 						}
 					}
@@ -279,7 +280,7 @@ var redirectBypasser = new function() {
 	}
 	
 	function handleMouseover(ev) {
-		if (OPTS.replaceTargetUrl && ((ev.currentTarget.nodeName == "A") || (ev.currentTarget.nodeName == "AREA")) && !ev.currentTarget.hasAttribute("data-rb-store")) {
+		if (OPTS.replaceUrl && ((ev.currentTarget.nodeName == "A") || (ev.currentTarget.nodeName == "AREA")) && !ev.currentTarget.hasAttribute("data-rb-store")) {
 			var cTarget = ev.currentTarget;
 			
 			targetProcess("", ev.currentTarget, function(data) {
@@ -288,13 +289,16 @@ var redirectBypasser = new function() {
 					
 					if (data.replaceURL) {
 						cTarget.href = data.replaceURL;
-						OPTS.highlightLink && cTarget.setAttribute("rb-hl-replace", "");
+						if (OPTS.highlightLink) {
+							doc.head.appendChild(uiStyle);
+							cTarget.setAttribute("rb-hl-replace", "");
+						}
 					}
 				}
 			});
 		}
 		
-		if ((!OPTS.keysShowPopup || (OPTS.keysShowPopup == handleKeyRaw)) && (targets.indexOf(ev.currentTarget) == -1)) {
+		if ((OPTS.menuEnable && !OPTS.keysShowPopup) || (OPTS.keysShowPopup && (OPTS.keysShowPopup == handleKeyRaw)) && (targets.indexOf(ev.currentTarget) == -1) ) {
 			window.HTMLElement.prototype.removeEventListener.call(ev.currentTarget, "mouseover", handleMouseover, false);
 			
 			var tcW = ev.target.clientWidth, tcH = ev.target.clientHeight, rect;
@@ -452,13 +456,12 @@ var redirectBypasser = new function() {
 						#rb-div a:hover {background-color: @tooltipBackgroundColor@!;}\
 						#rb-tooltip {background: 2px 2px / 20px auto no-repeat @tooltipBackgroundColor@!; color: @tooltipColor@!; font-size: @tooltipFontSize@px!; line-height: normal!; max-width: 600px!; overflow: hidden!; padding: 2px 2px 2px 24px!; position: absolute!; text-align: left!; text-overflow: ellipsis!; visibility: hidden; white-space: nowrap!; z-index: 15000000!;}\
 						#rb-tooltip * {line-height: normal!;}\
-						a[rb-hl], a[rb-hl] img, area[rb-hl], a[rb-hl-replace]:hover, a[rb-hl-replace]:hover img, area[rb-hl-replace]:hover {outline: 1px solid rgba(60,60,60,0.25);}\
+						a[rb-hl], a[rb-hl] img, area[rb-hl], a[rb-hl-replace]:hover, a[rb-hl-replace]:hover img, area[rb-hl-replace]:hover {outline: 2px dotted rgba(60,60,60,0.25)!;outline-offset: -1px!;}\
 					".replace(/@([^@]+)@/g, function(s, k) {
 						return ((OPTS.hasOwnProperty(k))? OPTS[k] : s);
 					}).replace(/!;/g, " !important; ");
 					
 					nodeAdd(doc.body || doc.documentElement);
-					doc.documentElement.insertBefore(uiStyle, doc.documentElement.firstChild);
 					OPTS.watchNodeInserted && observer.observe(doc.body || doc.documentElement, {subtree: true, childList: true});
 				}
 			}

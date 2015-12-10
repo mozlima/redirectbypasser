@@ -10,6 +10,36 @@ function startup(startupData, startupReason) {
 	var script = "";
 	var sandboxs = [];
 	var siteruleFormData = {};
+	var xhr = function(url, callback, type, responseType) {
+		var dx = new Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest")();
+		type && dx.overrideMimeType(type);
+		dx.open("GET", url, true);
+		dx.addEventListener("loadend", callback);
+		dx.responseType = ((responseType)? responseType : "");
+		dx.send();
+	};
+	
+	xhr(URL.createObjectURL(new Blob(["<!DOCTYPE html><html><head><base href=\"http://www.example.com/\" target=\"_blank\"></head><body></body></html>"], {
+		type: "text/html"
+	})), function(ev) {
+		URL.revokeObjectURL(this.responseURL);
+		document = this.response;
+			
+		xhr("chrome://redirectbypasser/content/content-scripts/content.js", function() {
+			script = this.responseText;
+			rb.optsBuild(storageGet("opts")) && storageSet("opts", OPTS);
+			rb.sitesBuildRules(storageGet("sitesrules") || rb.SITES_RULES_DEFAULT);
+			windowList(function(win) {
+				var i = win.frames.length;
+				windowProcess(win);
+				
+				while (i--) {
+					windowProcess(win.frames[i]);
+				}
+			});
+			CC["@mozilla.org/observer-service;1"].getService(CI.nsIObserverService).addObserver(rb, "document-element-inserted", false);
+		}, "text/javascript", "");
+	}, "text/html", "document");
 	
 	CC["@mozilla.org/moz/jssubscript-loader;1"].getService(CI.mozIJSSubScriptLoader).loadSubScript("chrome://redirectbypasser/content/background-common.js");
 	
@@ -23,83 +53,30 @@ function startup(startupData, startupReason) {
 		CC["@mozilla.org/observer-service;1"].getService(CI.nsIObserverService).removeObserver(rb, "document-element-inserted", false);
 		
 		var i = sandboxs.length;
-		
 		while (i--) {
 			sandboxs[i].window.removeEventListener("unload", windowOnUnload, false);
 			CU.evalInSandbox("if (typeof redirectBypasser != \"undefined\") {redirectBypasser.stop(true);}", sandboxs[i]);
 			CU.nukeSandbox(sandboxs[i]);
 		}
 		
-		script = null;
-		sandboxs = null;
-		siteruleFormData = null;
-		document = null;
-		OPTS = null;
+		sandboxs.length = 0;
 		
 		windowList(function(win) {
 			(win.location.href.indexOf("chrome://redirectbypasser/content/") === 0) && win.close();
 		});
 	};
 	
-	(function() {
-		var xhr = function(url, callback, type, responseType) {
-			var dx = new Components.Constructor("@mozilla.org/xmlextras/xmlhttprequest;1", "nsIXMLHttpRequest")();
-			type && dx.overrideMimeType(type);
-			dx.open("GET", url, true);
-			dx.addEventListener("loadend", callback);
-			dx.responseType = ((responseType)? responseType : "");
-			dx.send();
-		};
-		
-		!document && xhr(URL.createObjectURL(new Blob(["<!DOCTYPE html><html><head><base href=\"http://www.example.com/\" target=\"_blank\"></head><body></body></html>"], {
-			type: "text/html"
-		})), function(ev) {
-			URL.revokeObjectURL(this.responseURL);
-			document = this.response;
-		}, "text/html", "document");
-		
-		xhr("chrome://redirectbypasser/content/content-scripts/content.js", function() {
-			script = this.responseText;
-			
-			if (rb.optsBuild(storageGet("opts"))) {
-				storageSet("opts", OPTS);
-				
-				/*var timer = CC["@mozilla.org/timer;1"].createInstance(CI.nsITimer);
-				timer.initWithCallback(function() {
-					windowOpen({url: "http://moisesplima.blogspot.com.br/redirect-bypasser"});
-				}, 60000, CI.nsITimer.TYPE_ONE_SHOT);*/
-			}
-			
-			rb.sitesBuildRules(storageGet("sitesrules") || rb.SITES_RULES_DEFAULT);
-			windowList(function(win) {
-				var i = win.frames.length;
-				windowProcess(win);
-				
-				while (i--) {
-					windowProcess(win.frames[i]);
-				}
-			});
-			CC["@mozilla.org/observer-service;1"].getService(CI.nsIObserverService).addObserver(rb, "document-element-inserted", false);
-			
-		}, "text/javascript", "");
-	})();
-	
-	//FIXME:
 	function windowList(callback) {
 		var wins = CC["@mozilla.org/appshell/window-mediator;1"].getService(CI.nsIWindowMediator).getEnumerator("navigator:browser");
-		
 		while (wins.hasMoreElements()) {
 			var win = wins.getNext().QueryInterface(CI.nsIDOMWindow);
-			
 			if ("gBrowser" in win) {
 				var i = (("browsers" in win.gBrowser)? win.gBrowser.browsers.length : 0);
-				
 				while (i--) {
 					callback(win.gBrowser.getBrowserAtIndex(i).contentDocument.defaultView, win);
 				}
 			} else if ("BrowserApp" in win) {
 				var i = (("tabs" in win.BrowserApp)? win.BrowserApp.tabs.length : 0);
-				
 				while (i--) {
 					callback(win.BrowserApp.tabs[i].window, win);
 				}
@@ -109,10 +86,8 @@ function startup(startupData, startupReason) {
 	
 	function windowOpen(params) {
 		var win = CC['@mozilla.org/appshell/window-mediator;1'].getService(CI.nsIWindowMediator).getMostRecentWindow('navigator:browser');
-		
 		if (win && win.document && (win.document.readyState == "complete")) {
 			params.inBackground = params.selected = params.active;
-			
 			if ("gBrowser" in win) {
 				win.gBrowser.loadOneTab(params.url, params);
 			} else if ("BrowserApp" in win) {
@@ -135,7 +110,6 @@ function startup(startupData, startupReason) {
 			
 			sandboxs.push(sandbox);
 			win.addEventListener("unload", windowOnUnload, false);
-			
 			CU.exportFunction(onMessage, sandbox, {defineAs: "sendMessage"});
 			CU.evalInSandbox(script, sandbox);
 			
@@ -147,9 +121,7 @@ function startup(startupData, startupReason) {
 	
 	function windowOnUnload(ev) {
 		ev.currentTarget.removeEventListener("unload", windowOnUnload, false);
-		
 		var i = sandboxs.length;
-		
 		while (i--) {
 			if (sandboxs[i].window == ev.currentTarget) {
 				CU.evalInSandbox("if (typeof redirectBypasser != \"undefined\") {redirectBypasser.stop(true);}", sandboxs[i]);

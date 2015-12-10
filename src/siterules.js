@@ -4,11 +4,16 @@ var sendMessage = ((window.chrome && chrome.runtime)? chrome.runtime.sendMessage
 
 (function() {
 t.availableLanguages = ["en", "pt_BR"];
-t.load("en");
 ce("link", "type", "text/css", "rel", "stylesheet", "href", "options.css?" + Date.now(), "media", "all", document.head);
 
 function init(optsStored, sitesrulesStored, msgData) {
-	if ((document.readyState != "interactive") && (document.readyState != "complete")) {
+	if (!Object.keys(t.languages).length) {
+		if (!init.langLoaded) {
+			init.langLoaded = true;
+			t.load(optsStored.language || OPTS.language);
+		}
+		return setTimeout(init, 100, optsStored, sitesrulesStored, msgData);
+	} else if ((document.readyState != "interactive") && (document.readyState != "complete")) {
 		return document.addEventListener("DOMContentLoaded", function() {
 			init(optsStored, sitesrulesStored, msgData);
 		}, false);
@@ -22,67 +27,63 @@ function init(optsStored, sitesrulesStored, msgData) {
 	var SITES_RULES_STORE		= sitesrulesStored;
 	var selectSiterulePattern	= document.getElementById("select-siterule-pattern");
 	var eventActions = {
-		"click": {
-			"item.clone": function(ev, name, val, focused, chkd) {
-				addItem(name);
-			},
-			"form.action": function(ev, type) {
-				if (type == "close") {
+		"click.item.clone": function(ev, name, val, focused, chkd) {
+			addItem(name);
+		},
+		"click.form.action": function(ev, type) {
+			if (type == "close") {
+				window.close();
+			} else {
+				var data = getFormData();
+				
+				sendMessage({name: "opts.set", opts: data.opts, sitesrules: data.sitesrules, sitesrulesAction: "replace"}, function() {
 					window.close();
-				} else {
-					var data = getFormData();
-					
-					sendMessage({name: "opts.set", opts: data.opts, sitesrules: data.sitesrules, sitesrulesAction: "replace"}, function() {
-						window.close();
-					});
-				}
+				});
 			}
 		},
-		"change": {
-			"language.switch": function(ev) {
-				t.load(ev.target.value, function() {
-					t.node(document);
-				});
-			},
-			"pattern.switch": function(ev) {
-				var value = ev.target.value;
-				SITES_RULES_STORE.rules.some(function(rule) {
-					var stop;
-					
-					rule[0].some(function(pattern) {
-						if (pattern == value) {
-							document.getElementById("siteruleBehaviorParam").checked = true;
-							
-							rule[1].forEach(function(param) {
-								if (!document.querySelector("input.siterule-rule-param[value=\"" + param + "\"]")) {
-									addItem("siterule-rule-param").value = param;
-								}
-							});
-							
-							stop = true;
-						}
+		"change.language.switch": function(ev) {
+			t.load(ev.target.value, function() {
+				t.node(document);
+			});
+		},
+		"change.pattern.switch": function(ev) {
+			var value = ev.target.value;
+			SITES_RULES_STORE.rules.some(function(rule) {
+				var stop;
+				
+				rule[0].some(function(pattern) {
+					if (pattern == value) {
+						document.getElementById("siteruleBehaviorParam").checked = true;
 						
-						return stop;
-					});
+						rule[1].forEach(function(param) {
+							if (!document.querySelector("input.siterule-rule-param[value=\"" + param + "\"]")) {
+								addItem("siterule-rule-param").value = param;
+							}
+						});
+						
+						stop = true;
+					}
 					
 					return stop;
 				});
 				
-				
-				SITES_RULES_STORE.ignore.some(function(pattern) {
-					if (pattern == value) {
-						document.getElementById("siteruleBehaviorIgnore").checked = true;
-						return true;
-					}
-				});
-				
-				q("input.siterule-rule-param").forEach(function(el) {
-					if (el.value.toLowerCase() == "original") {
-						el.parentNode.removeChild(el);
-						document.getElementById("siteruleBehaviorOriginal").checked = true;
-					}
-				});
-			}
+				return stop;
+			});
+			
+			
+			SITES_RULES_STORE.ignore.some(function(pattern) {
+				if (pattern == value) {
+					document.getElementById("siteruleBehaviorIgnore").checked = true;
+					return true;
+				}
+			});
+			
+			q("input.siterule-rule-param").forEach(function(el) {
+				if (el.value.toLowerCase() == "original") {
+					el.parentNode.removeChild(el);
+					document.getElementById("siteruleBehaviorOriginal").checked = true;
+				}
+			});
 		}
 	}
 	
@@ -165,13 +166,14 @@ function init(optsStored, sitesrulesStored, msgData) {
 	
 	function handleEvents(ev) {
 		var action = ev.target.getAttribute("data-evt-" + ev.type);
-		if (action && eventActions[ev.type]) {
+		if (action) {
 			var params = action.split("|");
-			var fnc = params[0];
-			params[0] = ev;
-			
-			if (eventActions[ev.type][fnc] && eventActions[ev.type][fnc].apply(eventActions, params)) {
-				ev.preventDefault();
+			var fnc = eventActions[ev.type + "." + params[0]];
+			if (fnc) {
+				params[0] = ev;
+				if (fnc.apply(fnc, params)) {
+					ev.preventDefault();
+				}
 			}
 		}
 	}
@@ -214,12 +216,8 @@ function init(optsStored, sitesrulesStored, msgData) {
 		return {opts: optsNew, sitesrules: sitesrules};
 	}
 	
-	t.load(OPTS.language, function() {
-		t.node(document);
-	});
-	document.body.addEventListener("input", handleEvents, true);
-	document.body.addEventListener("click", handleEvents, true);
-	document.body.addEventListener("change", handleEvents, true);
+	t.node(document);
+	for (var a = Object.keys(eventActions), i = a.length; i--; document.body.addEventListener(a[i].substring(0, a[i].indexOf(".")), handleEvents, true));
 	selectSiterulePattern.dispatchEvent(new Event("change", {"bubbles": true, "cancelable": true}));
 }
 

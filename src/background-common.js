@@ -2,17 +2,20 @@
 
 var OPTS 	= {
 	/* background */
-	version					: "2.1",
+	version					: "2.1.1",
 	allowedProtocols		: "http|https|ftp|magnet",
 	maxCaptureRecursion		: 5,
 	excludedAttr			: "href|style|codebase|pluginspage",
 	language				: "auto",
-	useFallbackRule			: 0,
+	useFallbackRule			: true,
 	extOrder				: "webm|mpg|avi|wmv|rm|rmvb|mp4|asf|flv|swf|mp3|wav|wma|mid|ogg|torrent|zip|rar|7z|exe|bat|reg|sh|bin|pdf|jpg|jpe|jpeg|gif|png|bmp|ico|svg|htm|html|asp|php",
 	/* content */
 	highlightLink			: false,
 	openInNewPage			: 0, /* 0:default, 1:new page, 2:background */
-	replaceTargetUrl		: 0, /* menu|replace 0:force|disable 1:force|force 2:force|auto 3:auto|force 4:auto|auto  */
+	menuEnable				: true,
+	menuHideIfSingleRedir	: false,
+	replaceUrl				: false,
+	replaceOnlySingleRedir	: true,
 	keysShowPopup			: "",
 	keysOpenAsDownload		: ((typeof Components == "undefined")? "U+0053" : "S"),
 	keysPreventReferrer		: ((typeof Components == "undefined")? "U+0041" : "A"),
@@ -112,7 +115,9 @@ var rb = new function() {
 		
 		[	"highlightLink",
 			"openInNewPage",
-			"replaceTargetUrl",
+			"menuEnable",
+			"menuHideIfSingleRedir",
+			"replaceUrl",
 			"keysShowPopup",
 			"keysOpenAsDownload",
 			"keysPreventReferrer",
@@ -267,13 +272,13 @@ var rb = new function() {
 		}
 	}
 	
+	
+	
 	rb.sitesGetTop = function(links) {
 		if (!rb.REGEXPS.SITES_RULES_IGNORE.test(links.base.url)) {
 			var re = rb.REGEXPS.SITES_RULES_INDEX.exec(links.base.url);
-			
 			if (re) {
 				var rules = rb.SITES_RULES[re.indexOf(re[0], 1) - 1];
-				
 				if (rules) {
 					for (var j = 0, ll = rules[((rules[0].length > rules[1].length)? 0 : 1)].length; j < ll; j++) {
 						var rGroup = ((rules[0][j])? 0 : 1);
@@ -409,7 +414,7 @@ var rb = new function() {
 			links.list[links.base.url] = links.base;
 			
 		} else if (!isPlugin && links.index.length) {
-			if (OPTS.replaceTargetUrl && (OPTS.replaceTargetUrl != 2 || OPTS.replaceTargetUrl != 4 || links.index.length == 1)) {
+			if (OPTS.replaceUrl && (!OPTS.replaceOnlySingleRedir || links.index.length == 1)) {
 				links.replaceURL = rb.sitesGetTop(links);
 				
 				if (links.replaceURL) {

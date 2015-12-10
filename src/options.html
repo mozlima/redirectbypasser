@@ -7,7 +7,6 @@
 	<script type="text/javascript" src="background-common.js"></script>
 	<script type="text/javascript" src="utils.js"></script>
 	<script type="text/javascript" src="options.js"></script>
-	<script type="text/javascript" src="content-scripts/content.js"></script>
 </head>
 <body>
 	<div class="wrapper">
@@ -38,20 +37,18 @@
 					</div>
 					<h2 data-lang-text="Behavior">...</h2>
 					<div class="field">
-						<select class="select-menu-behavior" name="replaceTargetUrl" data-evt-change="menu.behavior.change">
-							<option value="0" data-lang-text="replaceTargetUrl0">...</option>
-							<option value="1" data-lang-text="replaceTargetUrl1">...</option>
-							<option value="2" data-lang-text="replaceTargetUrl2">...</option>
-							<option value="3" data-lang-text="replaceTargetUrl3">...</option>
-							<option value="4" data-lang-text="replaceTargetUrl4">...</option>
-						</select>
-						<b>&gt;</b>
-						<select class="select-menu-behavior" name="useFallbackRule">
-							<option value="0" data-lang-text="useFallbackRule0">...</option>
-							<option value="1" data-lang-text="useFallbackRule1">...</option>
-						</select>
-						<b>&gt;</b>
-						<a href="#sites" data-lang-text="Manage_rules"></a>
+						<input type="checkbox" name="menuEnable" id="menuEnable"/>&nbsp;<label for="menuEnable" data-lang-text="menuEnable"></label><br>
+						&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="menuHideIfSingleRedir" id="menuHideIfSingleRedir"/>
+						<label for="menuHideIfSingleRedir" data-lang-text="menuHideIfSingleRedir"></label>
+					</div>
+					<div class="field">
+						<input type="checkbox" name="replaceUrl" id="replaceUrl"/>
+						<label for="replaceUrl" data-lang-text="replaceUrl"></label><br>
+						&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="replaceOnlySingleRedir" id="replaceOnlySingleRedir"/>
+						<label for="replaceOnlySingleRedir" data-lang-text="replaceOnlySingleRedir"></label><br>
+						&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" name="useFallbackRule" id="useFallbackRule"/>
+						<label for="useFallbackRule" data-lang-text="useFallbackRule"></label>
+						(<a href="#sites" data-lang-text="Manage_rules"></a>)
 					</div>
 					<h2 data-lang-text="Keyboard_shortcuts">...</h2>
 					<div class="notice warning" data-lang-text="keyboard_tip"></div>

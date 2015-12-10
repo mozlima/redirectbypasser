@@ -1,18 +1,20 @@
+"use strict";
+
 function t(w) {
 	return (t.languages[t.language] && t.languages[t.language][w] && t.languages[t.language][w]["message"]) || (t.languages["en"] && t.languages["en"][w] && t.languages["en"][w]["message"]) || "-" + w;
 }
 t.language = "en";
 t.languages = {};
 t.load = function (lng, callback) {
-	if (!lng || lng == "auto") {
-		lng = navigator.language;
-		if (!(lng in t.availableLanguages)) {
-			lng = lng.split(/[_\-]/)[0];
-			lng = ((lng in t.availableLanguages)? lng : "en");
+	if (!lng || lng == "auto" || t.availableLanguages.indexOf(lng) == -1) {
+		lng = navigator.language.replace("-", "_");
+		if (t.availableLanguages.indexOf(lng) == -1) {
+			lng = lng.split("_")[0];
+			lng = ((t.availableLanguages.indexOf(lng) == -1)? "en" : lng);
 		}
 	}
 	
-	t.language = lng = lng.replace("-", "_");
+	t.language = lng;
 	
 	if (t.languages[lng]) {
 		callback && callback();
@@ -26,6 +28,9 @@ t.load = function (lng, callback) {
 			}
 			
 			callback && callback();
+		});
+		dx.addEventListener("error", function(ev) {
+			console.log("Redirect Bypasser: Failed to load language " + lng);
 		});
 		dx.responseType = "json";
 		dx.send();
