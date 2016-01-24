@@ -1,0 +1,222 @@
+{
+	"extShortDesc": {
+		"description": "this will be in the chrome web store: must be 132 characters or less",
+		"message": "Избегава преусмеравања и има директан приступ сајтовима које желите да посетите."
+	},
+	"General": {
+		"message": "Опште"
+	},
+	"Style": {
+		"message": "Стил"
+	},
+	"Advanced": {
+		"message": "Напредно"
+	},
+	"Sites": {
+		"message": "Сајтови"
+	},
+	"highlightLink": {
+		"message": "Означи активан линк на страници"
+	},
+	"openInNewPage": {
+		"message": "Отворање линкова у новој страници"
+	},
+	"openInNewPage0": {
+		"message": "Подразумевано понашање прегледача"
+	},
+	"openInNewPage1": {
+		"message": "Отвори у новој картици"
+	},
+	"openInNewPage2": {
+		"message": "Отвори у позадинској картици"
+	},
+	"menuEnable": {
+		"message": "Омогући мени"
+	},
+	"menuHideIfSingleRedir": {
+		"message": "Сакриј мени ако УРЛ адреса има једно преусмеравање"
+	},
+	"replaceUrl": {
+		"message": "Замени УРЛ адресу линка"
+	},
+	"replaceOnlySingleRedir": {
+		"message": "Само ако УРЛ адреса има једно преусмеравање"
+	},
+	"useFallbackRule": {
+		"message": "Користи резервну опцију ако нема постављених правила за линк"
+	},
+	"Manage_rules": {
+		"message": "Управљај правилима"
+	},
+	"Keyboard_shortcuts": {
+		"message": "Тастерске пречице"
+	},
+	"keyboard_tip": {
+		"message": "Опција \"Тастерска пречица за приказивање менија\" контролише видљивост менија.\nУпотреба:\n*  Притисни док се курсор миша налази преко било којег линка на страници.\n** Притисни приликом клика на било коју иконицу у искачућем менију."
+	},
+	"keysShowPopup": {
+		"message": "Тастерска пречица за приказивање менија"
+	},
+	"keysOpenAsDownload": {
+		"message": "Отвори линк као преузимање"
+	},
+	"keysPreventReferrer": {
+		"message": "Спречи слање реферера. Корисно за избегавање 403/Забрањена страница"
+	},
+	"keysAddSiterule": {
+		"message": "Додај правило линку"
+	},
+	"keysToggleEnable": {
+		"message": "Омогући/онемогући проширење"
+	},
+	"keysToggleEnableTemp": {
+		"message": "Омогући/онемогући проширење (само на тренутној страници)"
+	},
+	"Menu": {
+		"message": "Мени"
+	},
+	"menuShowDelay": {
+		"message": "Прикажи после (у милисекундама)"
+	},
+	"menuHideDelay": {
+		"message": "Сакриј после (у милисекундама)"
+	},
+	"menuOpacity": {
+		"message": "Провидност"
+	},
+	"menuOpacityHover": {
+		"message": "Провидност (курсор миша преко)"
+	},
+	"menuShadowDepth": {
+		"message": "Дубина сенке"
+	},
+	"Icons": {
+		"message": "Иконице"
+	},
+	"iconSize": {
+		"message": "Величина (у пикселима)"
+	},
+	"Tooltip": {
+		"message": "Опис алатке"
+	},
+	"tooltipFontSize": {
+		"message": "Величина фонта (у пикселима)"
+	},
+	"tooltipColor": {
+		"message": "Боја"
+	},
+	"tooltipBackgroundColor": {
+		"message": "Боја позадине"
+	},
+	"tooltipShowIcon": {
+		"message": "Прикажи фавикон"
+	},
+	"Protocols": {
+		"message": "Протоколи"
+	},
+	"Methods": {
+		"message": "Методе"
+	},
+	"useDeobfuscator": {
+		"message": "Заштита линкова (Hex, Base64...)"
+	},
+	"getFromTagText": {
+		"message": "Садржај текста"
+	},
+	"getFromPlugins": {
+		"message": "Прикључци"
+	},
+	"getFromAttributes": {
+		"message": "Особине (на клику, преласком миша преко...)"
+	},
+	"Excluded_attr": {
+		"message": "Игнорисане особине"
+	},
+	"maxCaptureRecursion": {
+		"message": "Максималан број дозвољених понављања за учитавање на једном линку"
+	},
+	"watchNodeInserted": {
+		"message": "Провери убачени садржај после учитавања странице"
+	},
+	"watchAttrModified": {
+		"message": "Откриј измене особина"
+	},
+	"Extension_sort_order": {
+		"message": "Редослед сортирања екстензија"
+	},
+	"Rules": {
+		"message": "Правила"
+	},
+	"siterules_tip": {
+		"message": "Правила се такође могу додати користећи пречицу постављену у Опште > Тастерске пречице > Додај правило линку.\n\nОбрасци: УРЛ адреса линка (користи * као знак замене). Користи <tld> за подударање са било којим највишим интернет доменом (com, org, net, gov...).\n\nПараметри:\n1. Било који знаковни низ упита.\n   Пример: imgrefurl се подудара са ...&imgrefurl=http://example.com.\n2. @назив-особине: се подудара са особином.\n   Пример: @onclick, @onmouseover...\n3. *.екстензија: се подудара са екстензијом.\n   Пример: *.jpg, *.mp4...\n4. #метода-екстракције: се подудара са методом екстракције (#base64, #hex, #reverse, #text, #javascript, #forced).\n5. Параметри, осим екстензија, се могу мешати у истом пољу одвојени зарезима.\n   Пример: \"@attribute,src\" се подудара ако садржи @attribute а затим src.\n   Не ради: \"@attribute,*.avi\", \"*.mp3,*.avi\"...\n\nРедослед обраде правила је на основу тога како су приказани на страници за конфигурацију."
+	},
+	"Patterns_parameters": {
+		"message": "Обрасци / параметри"
+	},
+	"Add_rule": {
+		"message": "Додај правило"
+	},
+	"Add_default_rules": {
+		"message": "Додај подразумевана правила"
+	},
+	"Ignore": {
+		"message": "Игнориши"
+	},
+	"Patterns": {
+		"message": "Обрасци"
+	},
+	"Add_rule": {
+		"message": "Додај правило"
+	},
+	"Pattern": {
+		"message": "Образац"
+	},
+	"Behavior": {
+		"message": "Понашање"
+	},
+	"siteruleBehaviorOriginal": {
+		"message": "Користи оригиналну УРЛ адресу"
+	},
+	"siteruleBehaviorIgnore": {
+		"message": "Игнориши ову УРЛ адресу"
+	},
+	"About": {
+		"message": "Информације"
+	},
+	"Changelog": {
+		"message": "Листа измена"
+	},
+	"Source_code": {
+		"message": "Изворни код"
+	},
+	"Contributors": {
+		"message": "Сарадници"
+	},
+	"Language": {
+		"message": "Језик"
+	},
+	"Auto": {
+		"message": "Аутоматски избор"
+	},
+	"Save": {
+		"message": "Сачувај"
+	},
+	"Close": {
+		"message": "Затвори"
+	},
+	"Reset": {
+		"message": "Врати на подразумевано"
+	},
+	"testArea": {
+		"message": "Тест поље"
+	},
+	"ON": {
+		"message": "Укључено"
+	},
+	"OFF": {
+		"message": "Искључено"
+	},
+	"Donate_paypal": {
+		"message": "Донирајте преко Paypal сервиса"
+	}
+}
