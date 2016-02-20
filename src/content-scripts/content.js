@@ -54,7 +54,6 @@ var redirectBypasser = new function() {
 	uiTooltip.id 			= "rb-tooltip";
 	uiMenulist.id 			= "rb-menulist";
 	
-	//FIXME: width/overflow
 	uiPopup.addEventListener("mouseover", function(ev) {
 		if (ev.target.nodeName == "A") {
 			var el = ev.target, w = (684 / OPTS.tooltipFontSize) * 1.3;
@@ -82,15 +81,9 @@ var redirectBypasser = new function() {
 		uiTooltip.style.visibility = "hidden";
 	}, false);
 	
-	uiPopup.addEventListener(((window.chrome && chrome.runtime) ? "click" : "mousedown"), function(ev) {
+	uiPopup.addEventListener("click", function(ev) {
 		if (ev.target.nodeName == "A") {
-			if (handleKeyRaw == OPTS.keysPreventReferrer) {
-				ev.target.setAttribute("rel", "noreferrer");
-				
-			} else if (handleKeyRaw == OPTS.keysOpenAsDownload) {
-				ev.target.setAttribute("download", "");
-				
-			} else if (handleKeyRaw == OPTS.keysAddSiterule) {
+			if (handleKeyRaw == OPTS.keysAddSiterule) {
 				var links = JSON.parse(targets[targetsIDs.indexOf(ev.target.getAttribute("data-rb-target-id"))].getAttribute("data-rb-store") || "{}");
 				links && links.base && sendMessage({
 					name: "siterules.addform.show",
@@ -109,6 +102,16 @@ var redirectBypasser = new function() {
 		}
 		
 		ev.stopPropagation();
+	}, false);
+	
+	uiPopup.addEventListener("mousedown", function(ev) {
+		if (ev.target.nodeName == "A") {
+			if (handleKeyRaw == OPTS.keysPreventReferrer) {
+				ev.target.setAttribute("rel", "noreferrer");
+			} else if (handleKeyRaw == OPTS.keysOpenAsDownload) {
+				ev.target.setAttribute("download", "");
+			}
+		}
 	}, false);
 	
 	function uiShow(target, ccX, ccY) {
@@ -282,14 +285,12 @@ var redirectBypasser = new function() {
 	function handleMouseover(ev) {
 		if (OPTS.replaceUrl && ((ev.currentTarget.nodeName == "A") || (ev.currentTarget.nodeName == "AREA")) && !ev.currentTarget.hasAttribute("data-rb-store")) {
 			var cTarget = ev.currentTarget;
-			
 			targetProcess("", ev.currentTarget, function(data) {
 				if (data.index.length) {
 					cTarget.setAttribute("data-rb-store", JSON.stringify(data));
-					
 					if (data.replaceURL) {
-						cTarget.href = data.replaceURL;
-						if (OPTS.highlightLink) {
+						cTarget.href = data.replaceURL;	
+						if (OPTS.highlightLink && !uiStyle.parentNode) {
 							doc.head.appendChild(uiStyle);
 							cTarget.setAttribute("rb-hl-replace", "");
 						}
@@ -455,7 +456,7 @@ var redirectBypasser = new function() {
 						}\
 						#rb-div a:hover {background-color: @tooltipBackgroundColor@!;}\
 						#rb-tooltip {background: 2px 2px / 20px auto no-repeat @tooltipBackgroundColor@!; color: @tooltipColor@!; font-size: @tooltipFontSize@px!; line-height: normal!; max-width: 600px!; overflow: hidden!; padding: 2px 2px 2px 24px!; position: absolute!; text-align: left!; text-overflow: ellipsis!; visibility: hidden; white-space: nowrap!; z-index: 15000000!;}\
-						#rb-tooltip * {line-height: normal!;}\
+						#rb-tooltip * {line-height: normal!; color: @tooltipColor@!;}\
 						a[rb-hl], a[rb-hl] img, area[rb-hl], a[rb-hl-replace]:hover, a[rb-hl-replace]:hover img, area[rb-hl-replace]:hover {outline: 2px dotted rgba(60,60,60,0.25)!;outline-offset: -1px!;}\
 					".replace(/@([^@]+)@/g, function(s, k) {
 						return ((OPTS.hasOwnProperty(k))? OPTS[k] : s);

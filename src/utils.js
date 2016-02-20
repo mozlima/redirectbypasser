@@ -1,7 +1,13 @@
 "use strict";
 
 function t(w) {
-	return (t.languages[t.language] && t.languages[t.language][w] && t.languages[t.language][w]["message"]) || (t.languages["en"] && t.languages["en"][w] && t.languages["en"][w]["message"]) || "-" + w;
+	if ((t.language in t.languages) && (w in t.languages[t.language])) {
+		return t.languages[t.language][w]["message"];
+	} else if (("en" in t.languages) && (w in t.languages["en"])) {
+		return t.languages["en"][w]["message"];
+	}
+	
+	return "-" + w;
 }
 t.language = "en";
 t.languages = {};
@@ -19,41 +25,39 @@ t.load = function (lng, callback) {
 	if (t.languages[lng]) {
 		callback && callback();
 	} else {
-		var dx = new XMLHttpRequest();
-		dx.open("GET", "_locales/" + lng + "/messages.json", true);
-		dx.overrideMimeType("application/json");
-		dx.addEventListener("loadend", function() {
-			if (dx.response) {
-				t.languages[lng] = dx.response;
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "_locales/" + lng + "/messages.json", true);
+		xhr.overrideMimeType("application/json");
+		xhr.addEventListener("loadend", function() {
+			if (this.response) {
+				t.languages[lng] = this.response;
+				callback && callback();
 			}
-			
-			callback && callback();
 		});
-		dx.addEventListener("error", function(ev) {
-			console.log("Redirect Bypasser: Failed to load language " + lng);
+		xhr.addEventListener("error", function(ev) {
+			alert("Redirect Bypasser: Failed to load language " + lng);
+			!("en" in t.languages) && t.load("en", callback);
 		});
-		dx.responseType = "json";
-		dx.send();
+		xhr.responseType = "json";
+		xhr.send();
 	}
 	
 	return t;
 }
 t.node = function (target) {
-	var nodes = document.evaluate("descendant-or-self::*[@*[contains(name(), 'data-lang')]]", (target || document), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-	
+	var nodes = document.evaluate("descendant-or-self::*[@data-lang or @*[contains(name(), 'data-lang-')]]", (target || document), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
 	for (var i = 0, node; node = nodes.snapshotItem(i); i++ ) {
-		var atts = document.evaluate("@*[starts-with(name(), 'data-lang')]", node, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-		
+		var atts = document.evaluate("@data-lang | @*[starts-with(name(), 'data-lang-')]", node, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
 		for (var ii = 0, att, attn; att = atts.snapshotItem(ii); ii++ ) {
-			attn = att.name.replace("data-lang-", "");
-			if (attn == "text") {
+			if (att.name == "data-lang") {
 				node.textContent = t(att.value);
 			} else {
-				node.setAttribute(attn, t(att.value));
+				node.setAttribute(att.name.substr(10), t(att.value));
 			}
 		}
-	
 	}
+	
+	return t;
 }
 
 function ce() {
@@ -72,11 +76,9 @@ function q(s, t) {
 
 function tabSelect(id) {
 	var tab = document.getElementById(id.substring(1));
-	
 	if (tab) {
 		var cssPath = function(el) {
 			var path = [];
-			
 			while ((el = el.parentNode) && el.nodeType === Node.ELEMENT_NODE) {
 				path.push(el.nodeName.toLowerCase() + ((el.id)? "#" + el.id : "") + ((el.className)? "." + el.className.replace(/\s+/g, ".") : ""));
 			}
@@ -84,24 +86,21 @@ function tabSelect(id) {
 			return path.reverse().join(" > ");
 		}
 		
-		Array.prototype.forEach.call(document.querySelectorAll("a[href$=\"" + id + "\"]"), function(el) {
-			Array.prototype.forEach.call(document.querySelectorAll(cssPath(el) + " > a.tab-selected"), function(el) {
+		q("a[href$=\"" + id + "\"]").forEach(function(el) {
+			q(cssPath(el) + " > a.tab-selected").forEach(function(el) {
 				el.classList.remove("tab-selected");
 			});
 			el.classList.add("tab-selected");
 		});
 		
-		Array.prototype.forEach.call(document.querySelectorAll(cssPath(tab) + " > " + tab.nodeName.toLowerCase() + "[id]"), function(el) {
+		q(cssPath(tab) + " > " + tab.nodeName.toLowerCase() + "[id]").forEach(function(el) {
 			el.classList.remove("tab-selected");
 		});
-		
 		tab.classList.add("tab-selected");
 		
-		var el = tab;
-	
-		while ((el = el.parentNode) && el.nodeType === Node.ELEMENT_NODE) {
-			if (el.id) {
-				tabSelect("#" + el.id);
+		while ((tab = tab.parentNode) && tab.nodeType === Node.ELEMENT_NODE) {
+			if (tab.id) {
+				tabSelect("#" + tab.id);
 				break;
 			}
 		}
@@ -124,9 +123,8 @@ function addItem(id) {
 
 function getNodeListValues(selector, arrayRef, target, preF) {
 	var values = [];
-	var arr = Array.prototype.slice.call((target || document).querySelectorAll(selector)).filter(function(item, pos, arr) {
+	var arr = q(selector, target).filter(function(item, pos, arr) {
 		var val = ((typeof preF == "function")? preF(item) : item.value);
-		
 		if ((val.length && (arr.indexOf(item) == pos) && (!arrayRef || (arrayRef.indexOf(val) == -1)))) {
 			values.push(val);
 			arrayRef && arrayRef.push(val);
@@ -146,10 +144,14 @@ function fadein(el) {
 	}, 1100);
 }
 
+window.addEventListener("click", function(ev) {
+	ev.target.hash && setTimeout(function(x, y){window.scroll(x, y);}, 100, window.scrollX, window.scrollY);
+}, true);
+
 window.addEventListener("hashchange", function(ev) {
 	tabSelect(location.hash);
 	ev.preventDefault();
-	document.body.scrollTop = document.documentElement.scrollTop = 0;
+	ev.stopPropagation();
 }, true);
 
 window.addEventListener("load", function() {

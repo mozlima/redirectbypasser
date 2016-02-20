@@ -171,20 +171,13 @@ var rb = new function() {
 			});
 			
 			Object.keys(params).forEach(function(key) {
-				var param = params[key];
-				var c = rulePatterns.length;
-				
+				var param = params[key], c = rulePatterns.length;
 				while (c--) {
 					var pInP = param.patterns.indexOf(rulePatterns[c]);
 					
 					if (pInP !== -1) {
-						if (isOriginal) {
-							param.patterns.splice(pInP, 1);
-						}
-						
-						if ((ruleParams.length === 1) && (param.params.indexOf(ruleParams[0]) !== -1)) {
-							rulePatterns.pop();
-						}
+						isOriginal && param.patterns.splice(pInP, 1);
+						((ruleParams.length === 1) && (param.params.indexOf(ruleParams[0]) !== -1)) && rulePatterns.pop();
 					}
 				}
 				
@@ -222,14 +215,10 @@ var rb = new function() {
 		rb.REGEXPS["SITES_RULES_IGNORE"] = /^$/;
 		
 		if (sitesrules && sitesrules.rules && sitesrules.ignore) {
-			var isExt = function(str) {
-				return (str && (str.indexOf("*.") === 0));
-			}
+			var isExt = function(str) {return (str && (str.indexOf("*.") === 0));};
 			
 			sitesrules.rules.forEach(function(rule) {
-				var localPatternGroup = [];
-				var siteRule = [[], []];//Exts | Params
-				var c = 0;
+				var localPatternGroup = [], c = 0, siteRule = [[/*Exts*/], [/*Params*/]];
 				
 				rule[0].forEach(function(pattern) {
 					localPatternGroup.push(convert2RegExp(pattern));
@@ -239,7 +228,7 @@ var rb = new function() {
 					var isE = isExt(rule[1][c]);
 					var idxGroup = [];
 					
-					while (isE == isExt(rule[1][c])) {
+					while ((c < rule[1].length) && (isE == isExt(rule[1][c]))) {
 						idxGroup.push(((isE)? rule[1][c].substr(2) : rule[1][c]).replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'));
 						c++;
 					}
@@ -271,8 +260,6 @@ var rb = new function() {
 			}
 		}
 	}
-	
-	
 	
 	rb.sitesGetTop = function(links) {
 		if (!rb.REGEXPS.SITES_RULES_IGNORE.test(links.base.url)) {
@@ -406,7 +393,6 @@ var rb = new function() {
 			
 			return ((mb ==-1)? -1 : ((ma == -1)? 1 : ma - mb));
 		});
-		
 		//FIXME:blob
 		if (["VIDEO","AUDIO"].indexOf(nodeName) !== -1) {
 			links.base.info.push("#" + nodeName.toLowerCase());

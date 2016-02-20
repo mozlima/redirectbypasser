@@ -3,16 +3,15 @@
 var sendMessage = ((window.chrome && chrome.runtime)? chrome.runtime.sendMessage : sendMessage);
 
 (function() {
-t.availableLanguages = ["en", "pt_BR"];
+t.availableLanguages = ["en", "pt_BR", "sr"];
 ce("link", "type", "text/css", "rel", "stylesheet", "href", "options.css?" + Date.now(), "media", "all", document.head);
 
 function init(optsStored, sitesrulesStored) {
-	if (!Object.keys(t.languages).length) {
-		if (!init.langLoaded) {
-			init.langLoaded = true;
-			t.load(optsStored.language || OPTS.language);
-		}
-		return setTimeout(init, 100, optsStored, sitesrulesStored);
+	if (!init.langLoaded && !Object.keys(t.languages).length) {
+		init.langLoaded = true;
+		return t.load(optsStored.language || OPTS.language, function() {
+			init(optsStored, sitesrulesStored);
+		});
 	} else if ((document.readyState != "interactive") && (document.readyState != "complete")) {
 		return document.addEventListener("DOMContentLoaded", function() {
 			init(optsStored, sitesrulesStored);

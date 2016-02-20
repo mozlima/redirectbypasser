@@ -1,4 +1,5 @@
 * {
+	color: #111111;
 	font: menu;
 	margin: 0;
 	padding: 0;
@@ -14,8 +15,8 @@ html,
 body {
 	background-color: #FFFFFF;
 	color: #111111;
-	height: 100%;
 	font: menu;
+	height: 100%;
 }
 
 strong, b {
@@ -25,10 +26,10 @@ strong, b {
 .wrapper {
 	height: auto !important;
 	margin: 0 auto -30px auto;
-	min-height: 100%;
-	padding: 0 2px;
 	max-width: 600px;
+	min-height: 100%;
 	min-width: 300px;
+	padding: 0 2px;
 }
 
 .footer, .push{
@@ -55,21 +56,27 @@ h1, h2, h3 {
 }
 
 h2 {
-	color: #666666;
-	font-size: 1.5rem;
+	color: #DEDEDE;
+	font-size: 2.5rem;
+	height: 0.75em;
+	letter-spacing: -0.10em;
+	line-height: 0.62em;
 	margin: .15em 0;
+	overflow: hidden;
+	text-overflow: clip;
+	white-space: nowrap;
 }
 
 h3 {
+	color: #666666;
 	font-size: 1.17em;
 	margin: .10em 0;
-	color: #666666;
 }
 
 a {
-	text-decoration: none;
-	cursor: pointer;
 	color: #02679C;
+	cursor: pointer;
+	text-decoration: none;
 }
 
 input:not([type="checkbox"]):not([type="radio"]),
@@ -122,8 +129,8 @@ button {
 	border: none;
 	color: #FFFFFF;
 	cursor: pointer;
-	text-align: center;
 	padding: 0 5px;
+	text-align: center;
 }
 
 button * {
@@ -141,8 +148,8 @@ button.red {
 }
 
 button.icon {
-	width: 1.5rem;
 	padding: 0;
+	width: 1.5rem;
 }
 
 button.icon img {
@@ -196,14 +203,14 @@ button.icon img {
 }
 
 div.field {
+	border-bottom: 1px solid #F9F9F9;
 	padding: 3px 0px;
-	border-bottom: 1px solid #f9f9f9;
 }
 
 div.field > label:first-child {
 	display: inline-block;
-	width: 50%;
 	vertical-align: top;
+	width: 50%;
 }
 
 div.field > label:first-child ~ input[type="text"] {
@@ -216,14 +223,14 @@ div.field input[type="range"] {
 }
 
 div.siterule {
+	border-bottom: 1px dashed #E1E1E1;
 	margin-bottom: 5px;
 	padding: 0px 0px 5px 0px;
-	border-bottom: 1px dashed #e1e1e1;
 }
 
 div.siterule > div {
-	vertical-align: top;
 	display: inline-block;
+	vertical-align: top;
 }
 
 div.siterule > div:first-child {
@@ -239,9 +246,9 @@ div.siterule > div:nth-child(3) {
 }
 
 div.siterule > div:nth-child(3) button {
-	margin-right: 0px;
-	float: right;
 	clear: both;
+	float: right;
+	margin-right: 0px;
 }
 
 .siterule-rule-pattern {
@@ -259,12 +266,12 @@ div.siterule > div:nth-child(3) button {
 }
 
 #test-area {
-	display: block;
-	text-align: center;
-	color: #aaa;
-	margin: 5px 0px;
 	border: 2px dotted rgba(0,0,0,0.2);
+	color: #aaa;
+	display: block;
+	margin: 5px 0px;
 	padding: 10px;
+	text-align: center;
 }
 
 .action-buttons {
@@ -292,18 +299,20 @@ div.siterule > div:nth-child(3) button {
 	text-shadow: none;
 	width: 2.5rem;
     -webkit-appearance: none;
+	-webkit-text-stroke: 0 !important;
 	/* Firefox */
     -moz-appearance: none;
     text-indent: 0.01px;
     text-overflow: "";
 	cursor: pointer;
 	text-align: left;
-	-webkit-text-stroke: 0 !important;
 	text-shadow: none !important;
 }
 
 .action-buttons select:hover,
-.action-buttons select:focus {
+.action-buttons select:focus,
+.action-buttons select:hover option,
+.action-buttons select:focus option {
 	background-color: #4887E4;
 	color: #FFFFFF;
 	width: 128px;	
@@ -321,22 +330,21 @@ div.siterule > div:nth-child(3) button {
 }
 
 .notice {
+	margin: 4px 0px 4px 20px;
 	padding: 0px 4px 0px 4px;
 	white-space: pre-wrap;
-	/*letter-spacing: -0.05em;*/
-	margin: 4px 0px 4px 20px;
 }
 
 .notice:before {
+	color: #FFFFFF;
 	float: left;
+	font-size: 32px;
 	height: 18px;
-	width: 18px;
+	line-height: 12px;
 	margin-left: -22px;
 	overflow: hidden;
-	font-size: 32px;
-	color: #FFFFFF;
-	line-height: 12px;
 	text-shadow: none;
+	width: 18px;
 	-webkit-font-smoothing: antialiased;
 	-webkit-text-stroke: 0;
 }
@@ -374,5 +382,5 @@ div.siterule > div:nth-child(3) button {
 ::-webkit-scrollbar-thumb {
 	background-color: #E9E9E9;
 	border-width: 0 0 0 2px;
-	border: 2px solid #fff;
+	border: 2px solid #FFFFFF;
 }

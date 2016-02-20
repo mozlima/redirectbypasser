@@ -87,10 +87,11 @@ function startup(startupData, startupReason) {
 	function windowOpen(params) {
 		var win = CC['@mozilla.org/appshell/window-mediator;1'].getService(CI.nsIWindowMediator).getMostRecentWindow('navigator:browser');
 		if (win && win.document && (win.document.readyState == "complete")) {
-			params.inBackground = params.selected = params.active;
 			if ("gBrowser" in win) {
+				params.inBackground = !params.active;
 				win.gBrowser.loadOneTab(params.url, params);
 			} else if ("BrowserApp" in win) {
+				params.selected = params.active;
 				win.BrowserApp.addTab(params.url, params);
 			}
 		}

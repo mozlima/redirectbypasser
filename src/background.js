@@ -12,6 +12,7 @@ function runtimeOnMessage(msgData, msgSender, sendResponse) {
 			break;
 		case "tab.open":
 			msgData.openerTabId = msgSender.tab.id;
+			msgData.index 		= msgSender.tab.index + 1;
 			delete msgData.name;
 			chrome.tabs.create(msgData);
 			break;
