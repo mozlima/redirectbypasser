@@ -2,7 +2,7 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:em="http://www.mozilla.org/2004/em-rdf#">
 	<Description about="urn:mozilla:install-manifest">
 		<em:name>Redirect Bypasser</em:name>
-		<em:version>2.1.1</em:version>
+		<em:version>2.1.2</em:version>
 		<em:creator>Moises Lima</em:creator>
 		<em:description>Avoid redirects and has direct access to the sites you want to visit.</em:description>
 		<em:homepageURL>http://moisesplima.blogspot.com.br/redirect-bypasser</em:homepageURL>

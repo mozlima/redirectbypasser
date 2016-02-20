@@ -2,7 +2,7 @@
 
 var OPTS 	= {
 	/* background */
-	version					: "2.1.1",
+	version					: "2.1.2",
 	allowedProtocols		: "http|https|ftp|magnet",
 	maxCaptureRecursion		: 5,
 	excludedAttr			: "href|style|codebase|pluginspage",
