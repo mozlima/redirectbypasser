@@ -1,0 +1,222 @@
+{
+	"extShortDesc": {
+		"description": "this will be in the chrome web store: must be 132 characters or less",
+		"message": "Contourne les redirections en donnant accès aux liens directs."
+	},
+	"General": {
+		"message": "G\u00e9n\u00e9ral"
+	},
+	"Style": {
+		"message": "Style"
+	},
+	"Advanced": {
+		"message": "Avanc\u00e9"
+	},
+	"Sites": {
+		"message": "Sites"
+	},
+	"highlightLink": {
+		"message": "Surligner le lien actif sur la page"
+	},
+	"openInNewPage": {
+		"message": "Ouvrir le lien dans\u00a0:"
+	},
+	"openInNewPage0": {
+		"message": "Comportement par d\u00e9faut du navigateur"
+	},
+	"openInNewPage1": {
+		"message": "Onglet au premier plan"
+	},
+	"openInNewPage2": {
+		"message": "Onglet en arri\u00e8re-plan"
+	},
+	"menuEnable": {
+		"message": "Afficher le menu"
+	},
+	"menuHideIfSingleRedir": {
+		"message": "Ne pas afficher le menu si l\u2019adresse a une seule redirection"
+	},
+	"replaceUrl": {
+		"message": "Remplacer l\u2019adresse du lien"
+	},
+	"replaceOnlySingleRedir": {
+		"message": "Remplacer l\u2019adresse du lien uniquement si elle a une seule redirection"
+	},
+	"useFallbackRule": {
+		"message": "Utiliser une solution de repli si aucune r\u00e8gle n\u2019est d\u00e9finie pour le lien"
+	},
+	"Manage_rules": {
+		"message": "g\u00e9rer les r\u00e8gles"
+	},
+	"Keyboard_shortcuts": {
+		"message": "Raccourcis clavier"
+	},
+	"keyboard_tip": {
+		"message": "Le raccourci pour \u00ab\u00a0Affichage du menu\u00a0\u00bb contr\u00f4le l\u2019apparition du menu.\nEmploi\u00a0:\n*  Presser alors que le curseur est au-dessus d\u2019un lien sur la page.\n** Presser tout en cliquant sur une des ic\u00f4nes du menu."
+	},
+	"keysShowPopup": {
+		"message": "Affichage du menu\u00a0:"
+	},
+	"keysOpenAsDownload": {
+		"message": "Ouverture du lien en tant que t\u00e9l\u00e9chargement\u00a0:"
+	},
+	"keysPreventReferrer": {
+		"message": "Blocage de l\u2019envoi du r\u00e9f\u00e9rent (utile pour \u00e9viter les pages \u00ab\u00a0403 : acc\u00e8s refus\u00e9\u00a0\u00bb)\u00a0:"
+	},
+	"keysAddSiterule": {
+		"message": "Ajout d\u2019une r\u00e8gle pour le lien\u00a0:"
+	},
+	"keysToggleEnable": {
+		"message": "Activation ou d\u00e9sactivation de l\u2019extension\u00a0:"
+	},
+	"keysToggleEnableTemp": {
+		"message": "Activation ou d\u00e9sactivation de l\u2019extension (page active uniquement)\u00a0:"
+	},
+	"Menu": {
+		"message": "Menu"
+	},
+	"menuShowDelay": {
+		"message": "D\u00e9lai d\u2019apparition (ms)\u00a0:"
+	},
+	"menuHideDelay": {
+		"message": "D\u00e9lai de disparition (ms)\u00a0:"
+	},
+	"menuOpacity": {
+		"message": "Opacit\u00e9\u00a0:"
+	},
+	"menuOpacityHover": {
+		"message": "Opacit\u00e9 (survol)\u00a0:"
+	},
+	"menuShadowDepth": {
+		"message": "Ombre\u00a0:"
+	},
+	"Icons": {
+		"message": "Ic\u00f4nes"
+	},
+	"iconSize": {
+		"message": "Taille (pixels)\u00a0:"
+	},
+	"Tooltip": {
+		"message": "Info-bulle"
+	},
+	"tooltipFontSize": {
+		"message": "Taille de la police (pixels)\u00a0:"
+	},
+	"tooltipColor": {
+		"message": "Couleur du texte\u00a0:"
+	},
+	"tooltipBackgroundColor": {
+		"message": "Couleur du fond\u00a0:"
+	},
+	"tooltipShowIcon": {
+		"message": "Afficher le favicon"
+	},
+	"Protocols": {
+		"message": "Protocoles"
+	},
+	"Methods": {
+		"message": "M\u00e9thodes d\u2019extraction des adresses"
+	},
+	"useDeobfuscator": {
+		"message": "Brouill\u00e9es (hex, base64, etc.)\u00a0:"
+	},
+	"getFromTagText": {
+		"message": "Contenu texte\u00a0:"
+	},
+	"getFromPlugins": {
+		"message": "Greffons\u00a0:"
+	},
+	"getFromAttributes": {
+		"message": "Attributs (onclick, onmouseover, etc.)\u00a0:"
+	},
+	"Excluded_attr": {
+		"message": "Attributs ignor\u00e9s"
+	},
+	"maxCaptureRecursion": {
+		"message": "Profondeur maximale d\u2019extraction d\u2019un lien\u00a0:"
+	},
+	"watchNodeInserted": {
+		"message": "V\u00e9rifier le contenu ins\u00e9r\u00e9 au chargement de la page"
+	},
+	"watchAttrModified": {
+		"message": "D\u00e9tecter les changements d\u2019attributs"
+	},
+	"Extension_sort_order": {
+		"message": "Classement des extensions"
+	},
+	"Rules": {
+		"message": "R\u00e8gles"
+	},
+	"siterules_tip": {
+		"message": "Il est \u00e9galement possible d\u2019ajouter une r\u00e8gle pour un lien en utilisant le raccourci clavier d\u00e9fini \u00e0 la rubrique \u00ab\u00a0G\u00e9n\u00e9ral\u00a0\u00bb.\n\nMotif\u00a0: adresse du lien (utiliser * comme caract\u00e8re de remplacement)\u00a0; <tld> correspond \u00e0 n\u2019importe quel domaine de premier niveau (com, org, net, gov, ...).\n\nParam\u00e8tres\u00a0:\n1. Toute cha\u00ecne de requ\u00eate.\n   Exemple\u00a0: imgrefurl correspond \u00e0 ...&imgrefurl=http://example.com.\n2. @nom-attribut correspond \u00e0 un attribut.\n   Exemples\u00a0: @onclick, @onmouseover, ...\n3. *.extension correspond \u00e0 une extension.\n   Exemples\u00a0: *.jpg, *.mp4, ...\n4. #m\u00e9thode-extraction correspond \u00e0 une m\u00e9thode d\u2019extraction (#base64, #hex, #reverse, #text, #javascript, #forced).\n5. Plusieurs param\u00e8tres, except\u00e9 les extensions, peuvent \u00eatre juxtapos\u00e9s dans le m\u00eame champ en les s\u00e9parant par une virgule.\n   Exemple\u00a0: \u00ab\u00a0@attribute,src\u00a0\u00bb \u00e9quivaut \u00e0 @attribute suivi de src.\n   Contre-exemples\u00a0: \u00ab\u00a0@attribute,*.avi\u00a0\u00bb, \u00ab\u00a0*.mp3,*.avi\u00a0\u00bb, ...\n\nLes r\u00e8gles sont trait\u00e9es dans l\u2019ordre qu\u2019elles occupent sur la page de configuration."
+	},
+	"Patterns_parameters": {
+		"message": "Motif et param\u00e8tres\u00a0:"
+	},
+	"Add_rule": {
+		"message": "Ajouter une r\u00e8gle"
+	},
+	"Add_default_rules": {
+		"message": "Ajouter les r\u00e8gles par d\u00e9faut"
+	},
+	"Ignore": {
+		"message": "Exclusions"
+	},
+	"Patterns": {
+		"message": "Motif\u00a0:"
+	},
+	"Add_rule": {
+		"message": "Ajouter une r\u00e8gle"
+	},
+	"Pattern": {
+		"message": "Motif"
+	},
+	"Behavior": {
+		"message": "Comportement"
+	},
+	"siteruleBehaviorOriginal": {
+		"message": "Utiliser l\u2019adresse originale"
+	},
+	"siteruleBehaviorIgnore": {
+		"message": "Ignorer cette adresse"
+	},
+	"About": {
+		"message": "\u00c0 propos"
+	},
+	"Changelog": {
+		"message": "Historique"
+	},
+	"Source_code": {
+		"message": "Code source"
+	},
+	"Contributors": {
+		"message": "Contributeurs"
+	},
+	"Language": {
+		"message": "Langue"
+	},
+	"Auto": {
+		"message": "Automatique"
+	},
+	"Save": {
+		"message": "Enregistrer"
+	},
+	"Close": {
+		"message": "Fermer"
+	},
+	"Reset": {
+		"message": "R\u00e9initialiser"
+	},
+	"testArea": {
+		"message": "Zone de test"
+	},
+	"ON": {
+		"message": "MARCHE"
+	},
+	"OFF": {
+		"message": "ARR\u00caT"
+	},
+	"Donate_paypal": {
+		"message": "Faire un don par Paypal"
+	}
+}
