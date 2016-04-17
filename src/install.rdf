@@ -33,13 +33,23 @@
 				<em:translator>https://github.com/Sijera</em:translator>
 			</Description>
 		</em:localized>
+		<em:localized>
+			<Description>
+				<em:locale>fr</em:locale>
+				<em:creator>Moises Lima</em:creator>
+				<em:name>Redirect Bypasser</em:name>
+				<em:description>Contourne les redirections en donnant accès aux liens directs.</em:description>
+				<em:homepageURL>http://moisesplima.blogspot.com.br/redirect-bypasser</em:homepageURL>
+				<em:translator>https://github.com/DenB10</em:translator>
+			</Description>
+		</em:localized>
 		
 		<!-- Firefox -->
 		<em:targetApplication>
 			<Description>
 				<em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
 				<em:minVersion>32.0</em:minVersion>
-				<em:maxVersion>48.*</em:maxVersion>
+				<em:maxVersion>49.0</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 		
@@ -48,7 +58,7 @@
 			<Description>
 				<em:id>{92650c4d-4b8e-4d2a-b7eb-24ecf4f6b63a}</em:id>
 				<em:minVersion>2.28</em:minVersion>
-				<em:maxVersion>2.45</em:maxVersion>
+				<em:maxVersion>2.46</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 		
@@ -57,7 +67,7 @@
 			<Description>
 				<em:id>{aa3c5121-dab2-40e2-81ca-7ea25febc110}</em:id>
 				<em:minVersion>32.0</em:minVersion>
-				<em:maxVersion>48.*</em:maxVersion>
+				<em:maxVersion>49.0</em:maxVersion>
 			</Description>
 		</em:targetApplication>
 		
