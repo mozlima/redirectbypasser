@@ -3,7 +3,7 @@
 var IS_KBE_KEY = (((typeof(KeyboardEvent) == "function") && ("key" in KeyboardEvent.prototype)) || (typeof(Components) != "undefined"));
 var OPTS 	= {
 	/* background */
-	version					: "2.1.2",
+	version					: "2.1.3",
 	allowedProtocols		: "http|https|ftp|magnet",
 	maxCaptureRecursion		: 50,
 	excludedAttr			: "href|style|codebase|pluginspage",
