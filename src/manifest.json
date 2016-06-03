@@ -1,6 +1,6 @@
 {
 	"name": "Redirect Bypasser",
-	"version": "2.1.2",
+	"version": "2.1.3",
 	"manifest_version": 2,
 	"homepage_url": "http://moisesplima.blogspot.com.br/redirect-bypasser",
 	"default_locale": "en",
@@ -20,6 +20,11 @@
 		"persistent": true
 	},
 	"options_page": "options.html",
+	"options_ui": {
+		"page": "options.html",
+		"chrome_style": false,
+		"open_in_tab": true
+	},
 	"content_scripts": [{
 		"matches": ["http://*/*", "https://*/*", "ftp://*/*", "file://*/*"],
 		"js": ["content-scripts/content.js"],
@@ -34,5 +39,11 @@
 		"file://*/*",
 		"notifications"
 	],
-	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+	"content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+	"applications": {
+		"gecko": {
+			"id": "redirectbypasser@moonlight21.com",
+			"strict_min_version": "47.0"
+		}
+	}
 }

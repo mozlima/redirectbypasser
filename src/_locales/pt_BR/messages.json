@@ -165,6 +165,9 @@
 	"Patterns": {
 		"message": "Modelos de URL"
 	},
+	"Parameters": {
+		"message": "Par\u00E2metros"
+	},
 	"Add_rule": {
 		"message": "Adicionar Regra"
 	},

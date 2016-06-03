@@ -1,11 +1,14 @@
 if (typeof redirectBypasser == "undefined") {
-var sendMessage = ((window.chrome && chrome.runtime)? chrome.runtime.sendMessage : sendMessage);
+var sendMessage = (((typeof(chrome) == "object") && ("runtime" in chrome) && ("sendMessage" in chrome.runtime))
+	? chrome.runtime.sendMessage
+	: sendMessage
+);
 var redirectBypasser = new function() {
 	"use strict";
 	var doc 					= window.document;
 	var redirectBypasser 	 	= this;
 	var OPTS 					= {};
-	var REGEXPS 			 	= {};
+	var RE		 			 	= {};
 	var targets 			 	= [];
 	var targetsIDs 			 	= [];
 	var targetsRects 		 	= [];
@@ -29,12 +32,14 @@ var redirectBypasser = new function() {
 	];
 	var observerCallback = function(ms) {
 		var i = ms.length;
+		
 		while (i--) {
 			if (ms[i].type == "attributes") {
 				nodeAdd(ms[i].target, true);
 				
 			} else if (ms[i].addedNodes.length > 0) {
 				var j = ms[i].addedNodes.length;
+				
 				while (j--) {
 					if (ms[i].addedNodes[j].nodeType == Node.ELEMENT_NODE) {
 						nodeAdd(ms[i].addedNodes[j], true);
@@ -54,6 +59,12 @@ var redirectBypasser = new function() {
 	uiTooltip.id 			= "rb-tooltip";
 	uiMenulist.id 			= "rb-menulist";
 	
+	if (!CSS.escape) {
+		CSS.escape = function(s) {
+			return s.replace(/[~!@$%^&*\(\)+=,./';:"?><\[\]\\\{\}|`#]/g, "\\$&");
+		}
+	}
+	
 	uiPopup.addEventListener("mouseover", function(ev) {
 		if (ev.target.nodeName == "A") {
 			var el = ev.target, w = (684 / OPTS.tooltipFontSize) * 1.3;
@@ -70,7 +81,9 @@ var redirectBypasser = new function() {
 				+ "</div>";
 			
 			var rect = el.getBoundingClientRect();
-			var left = el.offsetLeft - ((rect.left + uiTooltip.offsetWidth > window.innerWidth)? uiTooltip.offsetWidth - el.offsetWidth : 0 );
+			var left = el.offsetLeft
+				- ((rect.left + uiTooltip.offsetWidth > window.innerWidth)? uiTooltip.offsetWidth - el.offsetWidth : 0);
+			
 			uiTooltip.style.top = ((rect.top - uiTooltip.offsetHeight < 2)? uiPopup.offsetHeight : ~(uiTooltip.offsetHeight + -1)) + "px";
 			uiTooltip.style.left =  ((left + uiPopup.offsetLeft > 1)? left : -uiPopup.offsetLeft) + "px";
 			uiTooltip.style.visibility = "visible";
@@ -84,18 +97,19 @@ var redirectBypasser = new function() {
 	uiPopup.addEventListener("click", function(ev) {
 		if (ev.target.nodeName == "A") {
 			if (handleKeyRaw == OPTS.keysAddSiterule) {
-				var links = JSON.parse(targets[targetsIDs.indexOf(ev.target.getAttribute("data-rb-target-id"))].getAttribute("data-rb-store") || "{}");
+				var target	= targets[targetsIDs.indexOf(ev.target.getAttribute("data-rb-target-id"))];
+				var links	= JSON.parse(target && target.getAttribute("data-rb-store") || "{}");
+				
 				links && links.base && sendMessage({
-					name: "siterules.addform.show",
-					url: links.base.url,
-					info: ev.target.getAttribute("data-rb-tooltip").split(" \u2022 ").reverse(),
-					links: links
+					name	: "siterules.addform.show",
+					url		: links.base.url,
+					info	: ev.target.getAttribute("data-rb-tooltip").split(" \u2022 ").reverse(),
+					links	: links
 				});
 				targetsRemove();
 				ev.preventDefault();
-			}
-			
-			if (!ev.button && OPTS.openInNewPage == 2) {
+				
+			} else if (!ev.button && OPTS.openInNewPage == 2) {
 				sendMessage({name: "tab.open", url: ev.target.href, active: false});
 				ev.preventDefault();
 			}
@@ -108,6 +122,7 @@ var redirectBypasser = new function() {
 		if (ev.target.nodeName == "A") {
 			if (handleKeyRaw == OPTS.keysPreventReferrer) {
 				ev.target.setAttribute("rel", "noreferrer");
+				
 			} else if (handleKeyRaw == OPTS.keysOpenAsDownload) {
 				ev.target.setAttribute("download", "");
 			}
@@ -127,12 +142,18 @@ var redirectBypasser = new function() {
 				
 				var isPlugin = /embed|object|video|audio/i.test(target.nodeName), uPW = uiPopup.offsetWidth, uPH = uiPopup.offsetHeight;
 				
-				uiPopup.style.top = ((isPlugin || ((target.nodeName == "IMG")? (target.offsetHeight < 50) : (target.offsetHeight < 20))) ?
-					rect.top + ((rect.top - uPH > -1) ? -uPH : ((rect.bottom + uPH < doc.documentElement.offsetHeight - window.pageYOffset) ? rect.height : 0))
-					:
-					ccY + ((ccY - uPH > -1) ? -uPH : ccY)
+				uiPopup.style.top = ((isPlugin || ((target.nodeName == "IMG")? (target.offsetHeight < 50) : (target.offsetHeight < 20)))
+					? rect.top + ((rect.top - uPH > -1)
+						? -uPH
+						: ((rect.bottom + uPH < doc.documentElement.offsetHeight - window.pageYOffset)? rect.height : 0))
+					: ccY + ((ccY - uPH > -1)? -uPH : ccY)
 				) + window.pageYOffset + "px";
-				uiPopup.style.left = ((isPlugin)? rect.left : (ccX + ((ccX + uPW + 5 < window.innerWidth)? 5 : ((ccX - uPW < -1)? -ccX :-uPW)))) + window.pageXOffset + "px";
+				
+				uiPopup.style.left = ((isPlugin)
+					? rect.left
+					: (ccX + ((ccX + uPW + 5 < window.innerWidth)? 5 : ((ccX - uPW < -1)? -ccX :-uPW)))
+				) + window.pageXOffset + "px";
+				
 				uiPopup.style.visibility = "visible";
 			}
 		}
@@ -144,23 +165,29 @@ var redirectBypasser = new function() {
 		clearTimeout(uiTimer);
 		
 		for (var i = 0, link; link = links.list[links.index[i]]; i++) {
-			if (!(/^(javascript|data)/i).test(link.url) && !uiMenulist.querySelector("a[data-rb-link-id=\"" + encodeURIComponent(link.url) + "\"]")) {
+			if (!(/^(javascript|data)/i).test(link.url)
+				&& !uiMenulist.querySelector("a[data-rb-link-id=\"" + CSS.escape(link.url) + "\"]")
+			) {
 				var menuItem = doc.createElement("a");
 				menuItem.href = link.url;
-				menuItem.setAttribute("data-rb-link-id", encodeURIComponent(link.url));
+				menuItem.setAttribute("data-rb-link-id", link.url);
 				menuItem.setAttribute("data-rb-target-id", links.targetID);
 				menuItem.setAttribute("data-rb-tooltip", link.info.reverse().join(" \u2022 "));
 				OPTS.openInNewPage && menuItem.setAttribute("target", "_blank");
 				
 				extTest.some(function(key, idx) {
 					if (key.test(menuItem.pathname)) {
-						var sa = (link.info.join("")).split("").sort(), i = sa.length, ch = 0, cs = 0, cl = 0, mw = (((i)? sa[i - 1].charCodeAt(0) - sa[0].charCodeAt(0) : 0) || 1);
+						var sa = (link.info.join("")).split("").sort(), i = sa.length, ch = 0, cs = 0, cl = 0;
+						var mw = (((i)? sa[i - 1].charCodeAt(0) - sa[0].charCodeAt(0) : 0) || 1);
 						
 						for (var cc; i--; cc = sa[i].charCodeAt(0), ch += cc, cs += ((i % 2)? cc : 0), cl += ((i % 2)? 0 : cc));
 						
 						var hue = parseInt(((((ch % mw) / mw * 100) + (idx / extTest.length * 100)) % 100) * 3.6, 10);
 						var hil = (hue > 30 && 90 > hue) || (hue > 150 && 210 > hue) || (hue > 270 && 330 > hue);
-						menuItem.style.backgroundColor = "hsl(" + hue + "," + (30 + ~~(((hil)? 0.1 : 0.2) * ((cs % mw) / mw * 100))) + "%," + (40 + ~~(((!hil)? 0.1 : 0.2) * ((cl % mw) / mw * 100))) + "%)";
+						
+						menuItem.style.backgroundColor = "hsl(" + hue 
+							+ "," + (30 + ~~(((hil)? 0.1 : 0.2) * ((cs % mw) / mw * 100))) + "%,"
+							+ (40 + ~~(((!hil)? 0.1 : 0.2) * ((cl % mw) / mw * 100))) + "%)";
 						menuItem.style.setProperty("background-position", "-" + idx + "em center", "important");
 						
 						return true;
@@ -170,12 +197,16 @@ var redirectBypasser = new function() {
 			}
 		}
 		
-		uiTimer = setTimeout(function() {uiPopup.style.display = "block";}, 50);
+		uiTimer = setTimeout(function() {
+			uiPopup.style.display = "block";
+		}, 50);
 	}
 	
 	function uiRemoveItems(targetID, target) {
 		for (var a = uiMenulist.querySelectorAll("a[data-rb-target-id=\"" + targetID + "\"]"), i = a.length; i--; a[i].remove());
+		
 		target.removeAttribute("rb-hl");
+		
 		if (!uiMenulist.childNodes.length) {
 			uiTarget = null;
 			uiTooltip.style.visibility = "hidden";
@@ -189,8 +220,14 @@ var redirectBypasser = new function() {
 			var data = JSON.parse(target.getAttribute("data-rb-store"));
 			data.targetID = targetID;
 			callback(data);
+			
 		} else {
-			sendMessage({name: "target.process", targetID: targetID, src: target.outerHTML, baseURI: (target.baseURI || doc.baseURI)}, callback);
+			sendMessage({
+				name		: "target.process",
+				targetID	: targetID,
+				src			: target.outerHTML,
+				baseURI		: (target.baseURI || doc.baseURI)
+			}, callback);
 		}
 	}
 	
@@ -254,13 +291,17 @@ var redirectBypasser = new function() {
 				var isUi = uiPopup.contains(ev.target);
 				
 				for (var i = 0, rect; rect = targetsRects[i]; i++) {
-					if (isUi || (ev.clientX > rect.left && ev.clientX < rect.right && ev.clientY > rect.top && ev.clientY < rect.bottom) || targets[i].contains(ev.target)) {
+					if (isUi 
+						|| (ev.clientX > rect.left && ev.clientX < rect.right && ev.clientY > rect.top && ev.clientY < rect.bottom) 
+						|| targets[i].contains(ev.target)
+					) {
 						clearTimeout(targetsHideTimers[i]);
 						targetsHideTimers[i] = 0;
 						
 						if (targetsShowTimers[i] === 0) {
 							targetsShowTimers[i] = setTimeout(targetsAdd, OPTS.menuShowDelay, targetsIDs[i], targets[i]);
 						}
+						
 					} else {
 						if (targetsShowTimers[i] !== 0) {
 							clearTimeout(targetsShowTimers[i]);
@@ -279,17 +320,24 @@ var redirectBypasser = new function() {
 	}
 	
 	function handleMousemove(ev) {
-		CX = ev.clientX, CY = ev.clientY; (CX % 2 || CY % 2) && (clearTimeout(handleMousemoveTimer), handleMousemoveTimer = setTimeout(handleMouse, 50, ev));
+		CX = ev.clientX, CY = ev.clientY;
+		(CX % 2 || CY % 2) && (clearTimeout(handleMousemoveTimer), handleMousemoveTimer = setTimeout(handleMouse, 50, ev));
 	}
 	
 	function handleMouseover(ev) {
-		if (OPTS.replaceUrl && ((ev.currentTarget.nodeName == "A") || (ev.currentTarget.nodeName == "AREA")) && !ev.currentTarget.hasAttribute("data-rb-store")) {
+		if (OPTS.replaceUrl
+			&& ((ev.currentTarget.nodeName == "A") || (ev.currentTarget.nodeName == "AREA"))
+			&& !ev.currentTarget.hasAttribute("data-rb-store")
+		) {
 			var cTarget = ev.currentTarget;
+			
 			targetProcess("", ev.currentTarget, function(data) {
 				if (data.index.length) {
 					cTarget.setAttribute("data-rb-store", JSON.stringify(data));
+					
 					if (data.replaceURL) {
 						cTarget.href = data.replaceURL;	
+						
 						if (OPTS.highlightLink && !uiStyle.parentNode) {
 							doc.head.appendChild(uiStyle);
 							cTarget.setAttribute("rb-hl-replace", "");
@@ -299,7 +347,10 @@ var redirectBypasser = new function() {
 			});
 		}
 		
-		if ((OPTS.menuEnable && !OPTS.keysShowPopup) || (OPTS.keysShowPopup && (OPTS.keysShowPopup == handleKeyRaw)) && (targets.indexOf(ev.currentTarget) == -1) ) {
+		if ((OPTS.menuEnable && !OPTS.keysShowPopup) 
+			|| (OPTS.keysShowPopup && (OPTS.keysShowPopup == handleKeyRaw))
+			&& (targets.indexOf(ev.currentTarget) == -1)
+		) {
 			window.HTMLElement.prototype.removeEventListener.call(ev.currentTarget, "mouseover", handleMouseover, false);
 			
 			var tcW = ev.target.clientWidth, tcH = ev.target.clientHeight, rect;
@@ -308,9 +359,17 @@ var redirectBypasser = new function() {
 				var el = doc.elementFromPoint(ev.clientX, ev.clientY);
 				handleMouseTarget = el;
 				rect = el.getBoundingClientRect();
+				
 			} else {
 				handleMouseTarget = ev.target;
-				rect = {height: tcH, width: tcW, top: ev.clientY - ev.layerY, right: ev.clientX - ev.layerX + tcW, bottom: ev.clientY - ev.layerY + tcH, left: ev.clientX - ev.layerX};
+				rect = {
+					height	: tcH,
+					width	: tcW,
+					top		: ev.clientY - ev.layerY,
+					right	: ev.clientX - ev.layerX + tcW,
+					bottom	: ev.clientY - ev.layerY + tcH,
+					left	: ev.clientX - ev.layerX
+				}
 			}
 			
 			targets.push(ev.currentTarget);
@@ -368,24 +427,21 @@ var redirectBypasser = new function() {
 	function nodeWatch(el, fromObserver) {
 		var add = 2;
 		
-		if (el.nodeName == "EMBED" || el.nodeName == "OBJECT" || el.nodeName == "VIDEO" || el.nodeName == "AUDIO") {
-			add = +!!OPTS.getFromPlugins;
+		if ((el.nodeName == "EMBED") || (el.nodeName == "OBJECT") || (el.nodeName == "VIDEO") || (el.nodeName == "AUDIO")) {
+			add = ((OPTS.getFromPlugins)? 1 : 0);
+			
 		} else {
 			var url = el.href || el.src || el.data || "";
 			
-			if (url && (
-				REGEXPS.CONTAINS_URL_MIDDLE.test(url) ||
-				((OPTS.useDeobfuscator) && (
-					((el.protocol == "javascript:") && REGEXPS.CONTAINS_URL.test(url)) ||
-					(REGEXPS.CONTAINS_REVERSEENCODED_ALLOWEDPROTOCOL.test(url) || REGEXPS.CONTAINS_BASE64ENCODED.test(url) || REGEXPS.CONTAINS_HEXENCODED_ALLOWEDPROTOCOL.test(url))
-				))
-			)) {
+			if (url && RE["CONTAINS_URL_TESTER"].test(url)) {
 				add = 1;
-			} else if (OPTS.getFromTagText && REGEXPS.CONTAINS_URL.test(el.textContent)) {
+				
+			} else if (OPTS.getFromTagText && RE["CONTAINS_URL"].test(el.textContent)) {
 				add = 1;
+				
 			} else if (OPTS.getFromAttributes) {
 				for (var i = 0, attrs = el.attributes, attr; attr = attrs[i]; i++) {
-					if (!(REGEXPS.IS_EXCLUDED_ATTR.test(attr.name)) && REGEXPS.CONTAINS_URL.test(attr.value)) {
+					if (!(RE["IS_EXCLUDED_ATTR"].test(attr.name)) && RE["CONTAINS_URL"].test(attr.value)) {
 						add = 1;
 						break;
 					}
@@ -398,10 +454,11 @@ var redirectBypasser = new function() {
 			
 			if (fromObserver) {
 				var obsr = new MutationObserver(function() {});
-				obsr.observe(el, {attributes: true});
+				obsr.observe(el, {attributes: true, subtree: true, childList: true});
+				obsr.disconnect();
 			}
 			
-		} else if (!fromObserver && add === 2 && OPTS.watchAttrModified) {
+		} else if (add === 2 && OPTS.watchAttrModified) {
 			observer.observe(el, {attributes: true});
 		}
 	}
@@ -414,7 +471,11 @@ var redirectBypasser = new function() {
 				nodeWatch(el, fromObserver);
 				
 			} else if (el.childElementCount && el.querySelectorAll) {
-				for (var a = el.querySelectorAll("area,a" + ((OPTS.getFromPlugins)? ",embed,object,video,audio" : "")), i = a.length; i--; nodeWatch(a[i], fromObserver));
+				for (
+					var a = el.querySelectorAll("area,a" + ((OPTS.getFromPlugins)? ",embed,object,video,audio" : "")), i = a.length;
+					i--;
+					nodeWatch(a[i], fromObserver)
+				);
 			}
 		}
 	}
@@ -422,17 +483,12 @@ var redirectBypasser = new function() {
 	this.start = function(data) {
 		if (data && ("PAGE_DATA" in data)) {
 			if ("REGEXPS" in data.PAGE_DATA) {
-				REGEXPS = {
-					CONTAINS_URL							: RegExp(data.PAGE_DATA.REGEXPS.CONTAINS_URL, "i"),
-					CONTAINS_URL_MIDDLE						: RegExp(data.PAGE_DATA.REGEXPS.CONTAINS_URL_MIDDLE, "i"),
-					CONTAINS_REVERSEENCODED_ALLOWEDPROTOCOL	: RegExp(data.PAGE_DATA.REGEXPS.CONTAINS_REVERSEENCODED_ALLOWEDPROTOCOL, "i"),
-					CONTAINS_BASE64ENCODED					: RegExp(data.PAGE_DATA.REGEXPS.CONTAINS_BASE64ENCODED),
-					CONTAINS_HEXENCODED_ALLOWEDPROTOCOL		: RegExp(data.PAGE_DATA.REGEXPS.CONTAINS_HEXENCODED_ALLOWEDPROTOCOL, "i"),
-					IS_EXCLUDED_ATTR						: RegExp(data.PAGE_DATA.REGEXPS.IS_EXCLUDED_ATTR, "i")
-				}
+				Object.keys(data.PAGE_DATA["REGEXPS"]).forEach(function(key) {
+					RE[key] = RegExp(data.PAGE_DATA.REGEXPS[key], "i");
+				});
 			}
 			
-			if (data.PAGE_DATA["OPTS"]) {
+			if ("OPTS" in data.PAGE_DATA) {
 				Object.keys(data.PAGE_DATA["OPTS"]).forEach(function(key) {
 					OPTS[key] = data.PAGE_DATA["OPTS"][key];
 				});

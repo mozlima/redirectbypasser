@@ -4,8 +4,9 @@
 	<title>Redirect Bypasser</title>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/png" href="images/rb-icon16.png" />
+	<link rel="stylesheet" type="text/css" href="options.css" />
 	<script type="text/javascript" src="background-common.js"></script>
-	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript" src="main.js"></script>
 	<script type="text/javascript" src="siterules.js"></script>
 </head>
 <body>
@@ -22,7 +23,7 @@
 					<div class="field">
 						<div data-lang="Behavior"></div>
 						<input type="radio" name="siteruleBehavior" id="siteruleBehaviorParam" value="siteruleBehaviorParam" checked/>
-						<template id="tpl-siterule-rule-param">
+						<span data-lang="Parameters"></span>: <template id="tpl-siterule-rule-param">
 							<input type="text" value="" class="siterule-rule-param" data-removable="true" data-movable="siterule-rule-param"/>
 						</template>
 						<button type="button" class="icon green" data-evt-click="item.clone|siterule-rule-param">+</button>

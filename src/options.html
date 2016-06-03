@@ -4,8 +4,9 @@
 	<title>Redirect Bypasser</title>
 	<meta charset="utf-8">
 	<link rel="shortcut icon" type="image/png" href="images/rb-icon16.png" />
+	<link rel="stylesheet" type="text/css" href="options.css" />
 	<script type="text/javascript" src="background-common.js"></script>
-	<script type="text/javascript" src="utils.js"></script>
+	<script type="text/javascript" src="main.js"></script>
 	<script type="text/javascript" src="options.js"></script>
 </head>
 <body>
@@ -19,7 +20,7 @@
 				--><a href="#sites" data-lang="Sites"></a><!--
 				--><a href="#about" data-lang="About"></a>
 			</div>
-			<a id="test-area" data-lang="testArea"></a>
+			<a id="test-area" data-lang="testArea" data-evt-click="void"></a>
 			<form>
 				<div id="general" class="tab">
 					<div class="field">
@@ -190,10 +191,15 @@
 					</div>
 				</div>
 				<div id="about" class="tab">
-					<a href="https://github.com/mozlima/redirectbypasser/releases" data-lang="Changelog"></a><br>
-					<a href="https://github.com/mozlima/redirectbypasser" data-lang="Source_code"></a><br>
+					<a target="_blank" href="https://github.com/mozlima/redirectbypasser/releases" data-lang="Changelog"></a><br>
+					<a target="_blank" href="https://github.com/mozlima/redirectbypasser" data-lang="Source_code"></a><br>
 					<h2 data-lang="Contributors">...</h2>
-					<a href="https://github.com/mozlima/redirectbypasser/graphs/contributors">Github</a>
+					<a target="_blank" href="https://github.com/mozlima/redirectbypasser/graphs/contributors">Github</a>
+					<h2 data-lang="Contribute">...</h2>
+					<span data-lang="Rate_it"></span>: <a target="_blank" href="https://addons.opera.com/addons/extensions/details/redirect-bypasser/">Opera add-ons</a>,&nbsp;
+					<a target="_blank" href="http://addons.mozilla.org/firefox/addon/redirectbypasser/">Firefox add-ons</a><br/>
+					<span data-lang="Source_code"></span>: <a target="_blank" href="https://github.com/mozlima/redirectbypasser">Github</a><br/>
+					<a target="_blank" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&amp;hosted_button_id=5SZ5YCKYWJTNY" data-lang="Donate_paypal">Donate</a>
 				</div>
 				<div class="action-buttons">
 					<select id="select-language" name="language" data-lang-title="Language" data-evt-change="language.switch">

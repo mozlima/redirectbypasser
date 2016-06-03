@@ -1,19 +1,69 @@
 "use strict";
 
+if (!CSS.escape) {
+	CSS.escape = function(s) {
+		return s.replace(/[~!@$%^&*\(\)+=,./';:"?><\[\]\\\{\}|`#]/g, "\\$&");
+	}
+}
+
+if (!RegExp.escape) {
+	RegExp.escape = function(s) {
+		return s.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+	}
+}
+
 function t(w) {
 	if ((t.language in t.languages) && (w in t.languages[t.language])) {
 		return t.languages[t.language][w]["message"];
+		
 	} else if (("en" in t.languages) && (w in t.languages["en"])) {
 		return t.languages["en"][w]["message"];
 	}
 	
-	return "-" + w;
+	return t.missing(w);
 }
+
+t.availableLanguages = [];
 t.language = "en";
 t.languages = {};
+t.missing = function(w) {
+	return "-" + w;
+}
 t.load = function (lng, callback) {
+	if (!t.availableLanguages.length 
+		&& (typeof chrome != undefined)
+		&& chrome.runtime
+		&& chrome.runtime.getPackageDirectoryEntry
+	) {
+		chrome.runtime.getPackageDirectoryEntry(function(fs) {
+			fs.getDirectory("_locales", {create: false}, function(dir) {
+				var dr = dir.createReader();
+				var rd = function(entries) {
+					var i = entries.length;
+					
+					while (i--) {
+						if (entries[i].isDirectory) {
+							t.availableLanguages.push(entries[i].name);
+						}
+					}
+					
+					if (!entries.length) {
+						return t.load(lng, callback);
+					}
+					
+					dr.readEntries(rd);
+				}
+				
+				dr.readEntries(rd);
+			});
+		});
+		
+		return t;
+	}
+	
 	if (!lng || lng == "auto" || t.availableLanguages.indexOf(lng) == -1) {
 		lng = navigator.language.replace("-", "_");
+		
 		if (t.availableLanguages.indexOf(lng) == -1) {
 			lng = lng.split("_")[0];
 			lng = ((t.availableLanguages.indexOf(lng) == -1)? "en" : lng);
@@ -24,6 +74,7 @@ t.load = function (lng, callback) {
 	
 	if (t.languages[lng]) {
 		callback && callback();
+		
 	} else {
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", "_locales/" + lng + "/messages.json", true);
@@ -35,7 +86,7 @@ t.load = function (lng, callback) {
 			}
 		});
 		xhr.addEventListener("error", function(ev) {
-			alert("Redirect Bypasser: Failed to load language " + lng);
+			alert("Failed to load language : " + lng);
 			!("en" in t.languages) && t.load("en", callback);
 		});
 		xhr.responseType = "json";
@@ -45,12 +96,27 @@ t.load = function (lng, callback) {
 	return t;
 }
 t.node = function (target) {
-	var nodes = document.evaluate("descendant-or-self::*[@data-lang or @*[contains(name(), 'data-lang-')]]", (target || document), null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-	for (var i = 0, node; node = nodes.snapshotItem(i); i++ ) {
-		var atts = document.evaluate("@data-lang | @*[starts-with(name(), 'data-lang-')]", node, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
-		for (var ii = 0, att, attn; att = atts.snapshotItem(ii); ii++ ) {
+	var nodes = document.evaluate(
+		"descendant-or-self::*[@data-lang or @*[contains(name(), 'data-lang-')]]",
+		(target || document),
+		null,
+		XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+		null
+	);
+	
+	for (var i = 0, node; node = nodes.snapshotItem(i); i++) {
+		var atts = document.evaluate(
+			"@data-lang | @*[starts-with(name(), 'data-lang-')]",
+			node,
+			null,
+			XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+			null
+		);
+		
+		for (var ii = 0, att, attn; att = atts.snapshotItem(ii); ii++) {
 			if (att.name == "data-lang") {
 				node.textContent = t(att.value);
+				
 			} else {
 				node.setAttribute(att.name.substr(10), t(att.value));
 			}
@@ -67,7 +133,7 @@ function ce() {
 		e.setAttribute(a[i], a[i + 1]);
 	}
 	
-	return (!(l % 2) && a[l - 1].appendChild(e)) || e;
+	return ((!(l % 2) && a[l - 1].appendChild(e)) || e);
 }
 
 function q(s, t) {
@@ -75,41 +141,125 @@ function q(s, t) {
 }
 
 function tabSelect(id) {
-	var tab = document.getElementById(id.substring(1));
+	var tab = document.getElementById(id.replace("#", ""));
+	
 	if (tab) {
-		var cssPath = function(el) {
-			var path = [];
-			while ((el = el.parentNode) && el.nodeType === Node.ELEMENT_NODE) {
-				path.push(el.nodeName.toLowerCase() + ((el.id)? "#" + el.id : "") + ((el.className)? "." + el.className.replace(/\s+/g, ".") : ""));
-			}
+		var xpath = document.evaluate(
+			"//div[@id='" + tab.id
+			+ "']/ancestor-or-self::*[contains(concat(' ', @class, ' '), ' tab ')]/../div[contains(concat(' ', @class, ' '), ' tab ')]",
+			document,
+			null,
+			XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE,
+			null
+		);
+		
+		for (var i = 0, isDescendant  = false, el; el = xpath.snapshotItem(i); i++) {
+			isDescendant = el.contains(tab);
+			el.classList[((isDescendant)? "add" : "remove")]("tab-selected");
 			
-			return path.reverse().join(" > ");
-		}
-		
-		q("a[href$=\"" + id + "\"]").forEach(function(el) {
-			q(cssPath(el) + " > a.tab-selected").forEach(function(el) {
-				el.classList.remove("tab-selected");
-			});
-			el.classList.add("tab-selected");
-		});
-		
-		q(cssPath(tab) + " > " + tab.nodeName.toLowerCase() + "[id]").forEach(function(el) {
-			el.classList.remove("tab-selected");
-		});
-		tab.classList.add("tab-selected");
-		
-		while ((tab = tab.parentNode) && tab.nodeType === Node.ELEMENT_NODE) {
-			if (tab.id) {
-				tabSelect("#" + tab.id);
-				break;
+			if (el.id) {
+				var nodes = document.querySelectorAll("a[href$=\"#" + CSS.escape(el.id) + "\"]" + ((isDescendant)? "" : ".tab-selected" ));
+				
+				for (var ii = 0, el2; el2 = nodes[ii]; ii++ ) {
+					el2.classList[((isDescendant)? "add" : "remove")]("tab-selected");
+				}
 			}
 		}
+		
+		return true;
+	}
+	
+	return false;
+}
+
+var mlWatcher = new function() {
+	var self = this, loaded = {}, timer = 0, callbacks = [], ids = [];
+	
+	var onLoaded = function(id) {
+		if (id) {
+			ids.push(id);
+			clearTimeout(timer);
+			timer = setTimeout(onLoaded, 20);
+			return;
+		}
+		
+		var i = ids.length;
+		
+		while (i--) {
+			var ii = callbacks.length, idx = 0;
+			
+			while (ii--) {
+				idx = callbacks[ii].indexOf(ids[i]);
+				
+				if (idx != -1) {
+					callbacks[ii].splice(idx, 1);
+					
+					if (callbacks[ii].length == 1) {
+						callbacks[ii][0]();
+						callbacks.splice(ii, 1);
+					}
+				}
+			}
+		}
+		
+		ids.length = 0;
+	}
+	
+	this.setItem = function(id, v) {
+		loaded[id] = +v;
+		onLoaded(id);
+	}
+	
+	this.getItem = function(id) {
+		return ((loaded[id] == undefined)? -1 : loaded[id]);
+	}
+	
+	this.onItemsDone = function() {
+		var args = [];
+		
+		for (var i = 0, l = arguments.length - 1; i < l; i++) {
+			if (self.getItem(arguments[i]) == -1) {
+				args.push(arguments[i]);
+			} 
+		}
+		
+		if (args.length) {
+			callbacks.push([arguments[arguments.length - 1]].concat(args));
+			
+		} else {
+			arguments[arguments.length - 1]();
+		}
+	}
+	
+	this.watchLoad = function(obj, id) {
+		if (loaded[id] == undefined) {
+			var watchLoad = function(ev) {
+				obj.removeEventListener(ev.type, watchLoad, true);
+				self.setItem(id, +(ev.type == "load" || ev.type == "DOMContentLoaded"));
+			}
+			loaded[t] = -1;
+			
+			if (obj instanceof HTMLDocument) {
+				if ((obj.readyState != "interactive") && (obj.readyState != "complete")) {
+					obj.addEventListener("DOMContentLoaded", watchLoad, true);
+					
+				} else {
+					mlWatcher.setItem("DOMContentLoaded", 1);
+				}
+				
+			} else if (obj instanceof Window || obj instanceof XMLHttpRequest || obj instanceof HTMLElement) {
+				obj.addEventListener("load", watchLoad, true);
+				!(obj instanceof Window) && obj.addEventListener("error", watchLoad, true);
+			}
+		}
+		
+		return obj;
 	}
 }
 
 function addItem(id) {
 	var tpl = document.getElementById("tpl-" + id);
-	var el = document.importNode(tpl.content.firstElementChild);
+	var el = document.importNode(tpl.content.firstElementChild, true);
 	var gid = Math.random().toString(36).substr(2, 9);
 	var atts = document.evaluate("descendant-or-self::*/@*[contains(., \"\!ID!\")]", el, null, XPathResult.UNORDERED_NODE_SNAPSHOT_TYPE, null);
 	
@@ -337,7 +487,7 @@ window.addEventListener("load", function() {
 				if (tgt.hasAttribute("data-checkable-multiple")) {
 					tgt.setAttribute("data-checked", ((tgt.getAttribute("data-checked") == "true")? "false" : "true"));
 				} else {
-					var els = document.querySelectorAll("[data-checkable=\"" + tgt.getAttribute("data-checkable") + "\"]:not([data-checkable-multiple])");
+					var els = document.querySelectorAll("[data-checkable=\"" + CSS.escape(tgt.getAttribute("data-checkable")) + "\"]:not([data-checkable-multiple])");
 					
 					for(var i = 0, l = els.length; i < l; i++) {
 						els[i].removeAttribute("data-checked");
@@ -428,3 +578,126 @@ window.addEventListener("load", function() {
 		removableInputHook(els[i]);
 	}
 }, true);
+
+
+var sendMessage = (((typeof(chrome) == "object") && ("runtime" in chrome) && ("sendMessage" in chrome.runtime))
+	? chrome.runtime.sendMessage
+	: sendMessage
+);
+var OPTS_DEFAULT = JSON.parse(JSON.stringify(OPTS));
+var SITESRULES_DEFAULT = JSON.parse(JSON.stringify(SITESRULES));
+t.availableLanguages = ["en", "fr", "pt_BR", "sr"];
+
+mlWatcher.watchLoad(document, "DOMContentLoaded");
+
+(function() {
+	var initStorage = function(optsStored, sitesrulesStored) {
+		SITESRULES = ((!!sitesrulesStored && typeof(sitesrulesStored) == "object")? sitesrulesStored : SITESRULES);
+		
+		rb.optsBuild(optsStored);
+		rb.sitesBuildRules(SITESRULES);
+		t.load("en", function() {
+			t.load(OPTS.language, function() {
+				mlWatcher.setItem("storage+translation", 1);
+			});
+		});
+	}
+	
+	if ((typeof(chrome) == "object") && chrome.storage) {
+		chrome.storage.local.get(["opts", "sitesrules"], function(storageData) {
+			setTimeout(initStorage, 10, storageData.opts, storageData.sitesrules);
+			//initStorage(storageData.opts || {}, storageData.sitesrules || {});
+		});
+		
+	} else {
+		var optsStored, sitesrulesStored;
+		var pref = Components.classes["@mozilla.org/preferences-service;1"]
+			.getService(Components.interfaces.nsIPrefService)
+			.getBranch("extensions.redirectbypasser.");
+		
+		if (pref.getPrefType("opts") == pref.PREF_STRING) {
+			try {
+				optsStored = JSON.parse(pref.getCharPref("opts"));
+			} catch(e) {}
+		}
+		
+		if (pref.getPrefType("sitesrules") == pref.PREF_STRING) {
+			try {
+				sitesrulesStored = JSON.parse(pref.getCharPref("sitesrules"));
+			} catch(e) {}
+		}
+		
+		windowList(function(win) {
+			((win.location.href.indexOf("chrome://redirectbypasser/content/") === 0) && (win !== window)) && win.close();
+		});
+		
+		initStorage(optsStored, sitesrulesStored);
+	}
+})();
+
+mlWatcher.onItemsDone("storage+translation", "DOMContentLoaded", function() {
+	var handleKeyList	= {};
+	var handleKeyTimer	= 0;
+	
+	t.availableLanguages.sort().forEach(function(key) {
+		this.options.add(new Option(key.replace("_", "-").toUpperCase(), key));
+	}, document.getElementById("select-language"));
+	
+	Object.keys(OPTS).forEach(function(key) {
+		q("input[name=\"" + CSS.escape(key) + "\"], select[name=\"" + CSS.escape(key) + "\"]").forEach(function(el) {
+			if (el.hasAttribute("data-keyboard-keys")) {
+				el.value = convertkeys(OPTS[key].split(","));
+				
+				el.setAttribute("data-keyboard-keys", OPTS[key]);
+				el.addEventListener("keyup", function(ev) {
+					clearTimeout(handleKeyTimer);
+					
+					handleKeyTimer = setTimeout(handleKey, 300, ev.target);
+					handleKeyList[ev.key || ev.keyIdentifier] = 0;
+				}, false);
+				
+				el.addEventListener("keydown", function(ev) {
+					setTimeout(function() {
+						ev.target.value = ((ev.target.value[0] == ".")? " . . . " : ". . . .");
+					},10);
+				}, false);
+				
+				el.addEventListener("input", function(ev) {
+					ev.target.value = convertkeys(ev.target.getAttribute("data-keyboard-keys").split(","));
+				}, false);
+				
+			} else if (el.getAttribute("type") == "radio" ) {
+				el.checked = (el.value == OPTS[key]);
+				
+			} else {
+				el.checked = OPTS[key];
+				el.value = OPTS[key];
+			}
+		});
+	});
+	
+	document.getElementById("about-version").textContent = OPTS_DEFAULT.version;
+	
+	setTimeout(mlWatcher.setItem, 0, "resources", 1);
+	
+	function convertkeys(keys) {
+		keys.forEach(function(k, i) {
+			keys[i] = ((k[1] == "+")? String.fromCharCode(parseInt(k.substr(2), 16)) : k);
+		});
+		
+		return keys.sort(function(a, b) {return  b.length - a.length;}).join(" + ").toUpperCase();
+	}
+	
+	function handleKey(target) {
+		var akeys = Object.keys(handleKeyList), skeys = akeys.sort().join(",").toUpperCase();
+		
+		if (/U\+0008|BACKSPACE/.test(skeys)) {
+			akeys = [];
+			skeys = "";
+		}
+		
+		target.setAttribute("data-keyboard-keys", skeys);
+		target.value = convertkeys(akeys);
+		handleKeyList = {};
+	}
+});

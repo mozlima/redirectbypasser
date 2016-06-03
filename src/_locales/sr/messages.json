@@ -165,6 +165,9 @@
 	"Patterns": {
 		"message": "Обрасци"
 	},
+	"Parameters": {
+		"message": "Параметри"
+	},
 	"Add_rule": {
 		"message": "Додај правило"
 	},

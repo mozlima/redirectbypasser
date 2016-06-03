@@ -1,40 +1,16 @@
 "use strict";
 
-var sendMessage = ((window.chrome && chrome.runtime)? chrome.runtime.sendMessage : sendMessage);
-
-(function() {
-t.availableLanguages = ["en", "pt_BR", "sr"];
-ce("link", "type", "text/css", "rel", "stylesheet", "href", "options.css?" + Date.now(), "media", "all", document.head);
-
-function init(optsStored, sitesrulesStored) {
-	if (!init.langLoaded && !Object.keys(t.languages).length) {
-		init.langLoaded = true;
-		return t.load(optsStored.language || OPTS.language, function() {
-			init(optsStored, sitesrulesStored);
-		});
-	} else if ((document.readyState != "interactive") && (document.readyState != "complete")) {
-		return document.addEventListener("DOMContentLoaded", function() {
-			init(optsStored, sitesrulesStored);
-		}, false);
-	}
-	
-	if (!sitesrulesStored || !sitesrulesStored.rules || !sitesrulesStored.ignore) {
-		sitesrulesStored = rb.SITES_RULES_DEFAULT;
-	}
-	
-	var OPTS_DEFAULT = JSON.parse(JSON.stringify(OPTS));
-	var handleKeyList = {};
-	var handleKeyTimer = 0;
+mlWatcher.onItemsDone("resources", function() {
 	var testArea = document.getElementById("test-area");
-	
-	testArea.setAttribute("data-attribute-1", "http://www.example.com/test.avi");
-	testArea.setAttribute("data-attribute-2", "http://www.example.com/test.jpg?url=http://www.example.com/test.zip");
-	testArea.addEventListener("click", function(ev) {
-		ev.preventDefault();
-	}, true);
-	testArea.href = "http://www.example.com/test/?url1=http://www.example.com/1&url2=http://www.example.com/t.jpg&url3=http://www.example.com/t.mp3&aHR0cDovL3d3dy5leGFtcGxlLmNvbS9iYXNlNjQ=&687474703A2F2F7777772E6578616D706C652E636F6D2F686578";
-	
-	var _sendMessage = sendMessage;
+	testArea.setAttribute("data-attribute-1", "http://example.com/test.avi");
+	testArea.setAttribute("data-attribute-2", "http://example.com/test.jpg?url=http://example.com/test.zip");
+	testArea.href = "http://example.com/test/"
+		+ "?url1=http://example.com/1"
+		+ "&url2=http://example.com/t.jpg"
+		+ "&url3=http://example.com/t.mp3"
+		+ "&aHR0cDovL2V4YW1wbGUuY29tL2Jhc2U2NA=="
+		+ "&687474703A2F2F6578616D706C652E636F6D2F686578";
+	var _sendMessage	= sendMessage;
 	
 	sendMessage = function(data, sendResponse) {
 		if (data.name == "opts.get") {
@@ -58,8 +34,8 @@ function init(optsStored, sitesrulesStored) {
 			siteruleAdd([["*://example.org*"] , ["*.html"]]);
 		},
 		"click.siterule.add.default": function(ev) {
-			rb.SITES_RULES_DEFAULT.rules.forEach(siteruleAdd);
-			rb.SITES_RULES_DEFAULT.ignore.forEach(function(key) {
+			SITESRULES_DEFAULT.rules.forEach(siteruleAdd);
+			SITESRULES_DEFAULT.ignore.forEach(function(key) {
 				addItem("siterule-ignore-pattern").value = key;
 			});
 		},
@@ -71,6 +47,7 @@ function init(optsStored, sitesrulesStored) {
 				sendMessage({name: "opts.set", opts : OPTS_DEFAULT}, function() {
 					window.location.reload();
 				});
+				
 			} else {
 				var data = getFormData();
 				
@@ -79,50 +56,15 @@ function init(optsStored, sitesrulesStored) {
 				});
 			}
 		},
+		"click.void": function(ev, type) {
+			return true;
+		},
 		"change.language.switch": function(ev) {
 			t.load(ev.target.value, function() {
 				t.node(document);
 			});
 		}
 	}
-	
-	t.availableLanguages.sort().forEach(function(key) {
-		this.options.add(new Option(key.replace("_", "-").toUpperCase(), key));
-	}, document.getElementById("select-language"));
-	
-	rb.optsBuild(optsStored);
-	rb.sitesBuildRules(sitesrulesStored);
-	ce("script", "src", "content-scripts/content.js", document.head);
-	
-	Object.keys(OPTS).forEach(function(key) {
-		q("input[name='" + key + "'], select[name='" + key + "']").forEach(function(el) {
-			if (el.hasAttribute("data-keyboard-keys")) {
-				el.value = convertkeys(OPTS[key].split(","));
-				el.setAttribute("data-keyboard-keys", OPTS[key]);
-				el.addEventListener("keyup", function(ev) {
-					clearTimeout(handleKeyTimer);
-					handleKeyTimer = setTimeout(handleKey, 300, ev.target);
-					handleKeyList[ev.key || ev.keyIdentifier] = 0;
-				}, false);
-				
-				el.addEventListener("keydown", function(ev) {
-					setTimeout(function() {
-						ev.target.value = ((ev.target.value[0] == ".")? " . . . " : ". . . .");
-					},10);
-				}, false);
-				
-				el.addEventListener("input", function(ev) {
-					ev.target.value = convertkeys(ev.target.getAttribute("data-keyboard-keys").split(","));
-				}, false);
-				
-			} else if (el.getAttribute("type") == "radio" ) {
-				el.checked = (el.value == OPTS[key]);
-			} else {
-				el.checked = OPTS[key];
-				el.value = OPTS[key];
-			}
-		});
-	});
 	
 	OPTS.allowedProtocols.split(/((?:[^\|\\]+|\\.)*)\|/).forEach(function(key) {
 		key && (addItem("protocol-item").value = key.replace(/\\(.)/g, "$1"));
@@ -133,26 +75,32 @@ function init(optsStored, sitesrulesStored) {
 	OPTS.excludedAttr.split(/((?:[^\|\\]+|\\.)*)\|/).forEach(function(key) {
 		key && (addItem("excludedattr-item").value = key.replace(/\\(.)/g, "$1"));
 	});
-	sitesrulesStored.rules.forEach(siteruleAdd);
-	sitesrulesStored.ignore.forEach(function(key) {
+	SITESRULES.rules.forEach(siteruleAdd);
+	SITESRULES.ignore.forEach(function(key) {
 		addItem("siterule-ignore-pattern").value = key;
 	});
 	
-	document.getElementById("about-version").textContent = OPTS_DEFAULT.version;
+	for (
+		var a = Object.keys(eventActions), i = a.length;
+		i--;
+		document.body.addEventListener(a[i].substring(0, a[i].indexOf(".")), handleEvents, true)
+	);
 	
 	t.node(document);
 	tabSelect(location.hash || "#general");
-	for (var a = Object.keys(eventActions), i = a.length; i--; document.body.addEventListener(a[i].substring(0, a[i].indexOf(".")), handleEvents, true));
 	document.addEventListener("change", updateScript, false);
 	document.addEventListener("inputafterremove", updateScript, false);
+	ce("script", "src", "content-scripts/content.js", document.head);
 	
 	function handleEvents(ev) {
 		var action = ev.target.getAttribute("data-evt-" + ev.type);
+		
 		if (action) {
-			var params = action.split("|");
-			var fnc = eventActions[ev.type + "." + params[0]];
+			var params = action.split("|"), fnc = eventActions[ev.type + "." + params[0]];
+			
 			if (fnc) {
 				params[0] = ev;
+				
 				if (fnc.apply(fnc, params)) {
 					ev.preventDefault();
 				}
@@ -167,7 +115,14 @@ function init(optsStored, sitesrulesStored) {
 		var divParams	= ce("div", siterule);
 		var divAction	= ce("div", siterule);
 		var inpPattern	= ce("input", "type", "text", "value", "*://example.org*", "class", "siterule-rule-pattern", "data-removable", "true");
-		var inpParam	= ce("input", "type", "text", "value", "*.html", "class", "siterule-rule-param", "data-removable", "true", "data-movable", "siterule-rule-param");
+		var inpParam	= ce(
+			"input", 
+			"type", "text",
+			"value", "*.html",
+			"class", "siterule-rule-param",
+			"data-removable", "true",
+			"data-movable", "siterule-rule-param"
+		);
 		
 		var bt1 = ce("button", "type", "button", "class", "icon green", divPatterns);
 		bt1.addEventListener("click", function() {
@@ -212,36 +167,15 @@ function init(optsStored, sitesrulesStored) {
 		fadein(siterule);
 	}
 	
-	function convertkeys(keys) {
-		keys.forEach(function(k, i) {
-			keys[i] = ((k[1] == "+")? String.fromCharCode(parseInt(k.substr(2), 16)) : k);
-		});
-		
-		return keys.sort(function(a, b) {return  b.length - a.length;}).join(" + ").toUpperCase();
-	}
-	
-	function handleKey(target) {
-		var akeys = Object.keys(handleKeyList);
-		var skeys = akeys.sort().join(",").toUpperCase();
-		
-		if (/U\+0008|BACKSPACE/.test(skeys)) {
-			akeys = [];
-			skeys = "";
-		}
-		
-		target.setAttribute("data-keyboard-keys", skeys);
-		target.value = convertkeys(akeys);
-		handleKeyList = {};
-	}
-	
 	function getFormData() {
-		var sitesrules =  {ignore: [], rules: []};
-		var optsNew = JSON.parse(JSON.stringify(OPTS));
+		var sitesrules	=  {ignore: [], rules: []};
+		var optsNew		= JSON.parse(JSON.stringify(OPTS));
 		
 		Object.keys(optsNew).forEach(function(key) {
-			q("input[name=\"" + key + "\"], select[name=\"" + key + "\"]").forEach(function(el) {
+			q("input[name=\"" + CSS.escape(key) + "\"], select[name=\"" + CSS.escape(key) + "\"]").forEach(function(el) {
 				if (el.hasAttribute("data-keyboard-keys")) {
 					optsNew[key] = el.getAttribute("data-keyboard-keys");
+					
 				} else if ((el.type != "radio") || el.checked) {
 					optsNew[key] = ((el.type == "checkbox")? el.checked : ((typeof optsNew[key] == "number")? +el.value : el.value));
 				}
@@ -249,21 +183,21 @@ function init(optsStored, sitesrulesStored) {
 		});
 		
 		optsNew.scriptEnabled		= OPTS.scriptEnabled;
-		
 		optsNew.allowedProtocols 	= getNodeListValues("input.protocol-item", null, null, function(el) {
-			return el.value.trim().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+			return el.value.trim().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		}).join("|");
-		
 		optsNew.excludedAttr 		= getNodeListValues("input.excludedattr-item", null, null, function(el) {
-			return el.value.trim().replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+			return el.value.trim().replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		}).join("|");
-		
 		optsNew.extOrder 			= getNodeListValues("input.extorder-item", null, null, function(el) {
-			return el.value.trim().replace(/\*|\.|\s/g, "").replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+			return el.value.trim().replace(/\*|\.|\s/g, "").replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
 		}).join("|");
 		
 		q("div.siterule").forEach(function(siterule) {
-			var rule = [getNodeListValues("input.siterule-rule-pattern", null, siterule), getNodeListValues("input.siterule-rule-param", null, siterule)];
+			var rule = [
+				getNodeListValues("input.siterule-rule-pattern", null, siterule),
+				getNodeListValues("input.siterule-rule-param", null, siterule)
+			];
 			(rule[0].length && rule[1].length) && sitesrules.rules.push(rule);
 		});
 		getNodeListValues("input.siterule-ignore-pattern", sitesrules.ignore);
@@ -274,38 +208,10 @@ function init(optsStored, sitesrulesStored) {
 	
 	function updateScript() {
 		var data = getFormData();
+		
 		rb.optsBuild(data.opts);
 		rb.sitesBuildRules(data.sitesrules);
 		redirectBypasser.stop(true);
 		redirectBypasser.start({PAGE_DATA : rb.PAGE_DATA});
 	}
-}
-
-if (window.chrome && chrome.storage) {
-	chrome.storage.local.get(["opts", "sitesrules"], function(storageData) {
-		setTimeout(init, 10, storageData.opts || {}, storageData.sitesrules || {});
-	});
-} else {
-	var optsStored, sitesrulesStored;
-	var pref = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("extensions.redirectbypasser.");
-	
-	if (pref.getPrefType("opts") == pref.PREF_STRING) {
-		try {
-			optsStored = JSON.parse(pref.getCharPref("opts"));
-		} catch(e) {}
-	}
-	
-	if (pref.getPrefType("sitesrules") == pref.PREF_STRING) {
-		try {
-			sitesrulesStored = JSON.parse(pref.getCharPref("sitesrules"));
-		} catch(e) {}
-	}
-	
-	windowList(function(win) {
-		((win.location.href.indexOf("chrome://redirectbypasser/content/") === 0) && (win !== window)) && win.close();
-	});
-	
-	init(optsStored || {}, sitesrulesStored || {});
-}
-
-})();
+});

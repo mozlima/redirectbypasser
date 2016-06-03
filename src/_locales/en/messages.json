@@ -165,6 +165,9 @@
 	"Patterns": {
 		"message": "Patterns"
 	},
+	"Parameters": {
+		"message": "Parameters"
+	},
 	"Add_rule": {
 		"message": "Add rule"
 	},
@@ -192,6 +195,9 @@
 	"Contributors": {
 		"message": "Contributors"
 	},
+	"Contribute": {
+		"message": "Contribute"
+	},
 	"Language": {
 		"message": "Language"
 	},
@@ -218,5 +224,11 @@
 	},
 	"Donate_paypal": {
 		"message": "Donate with Paypal"
+	},
+	"Rate_it": {
+		"message": "Rate it"
+	},
+	"Translation": {
+		"message": "Translation"
 	}
 }

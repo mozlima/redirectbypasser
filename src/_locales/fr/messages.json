@@ -165,6 +165,9 @@
 	"Patterns": {
 		"message": "Motif\u00a0:"
 	},
+	"Parameters": {
+		"message": "Param\u00e8tres\u00a0"
+	},
 	"Add_rule": {
 		"message": "Ajouter une r\u00e8gle"
 	},
